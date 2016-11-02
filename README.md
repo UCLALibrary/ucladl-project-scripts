@@ -1,2 +1,3 @@
 # ucladl-project-scripts
-A home for scripts used in various Digital Library projects.
+
+Scripts are organized by project name (e.g., EMEL, DMP).
