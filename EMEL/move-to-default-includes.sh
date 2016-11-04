@@ -24,7 +24,7 @@
 #   aaa
 #   ccc
 #
-# the filesystem goes from:
+# the directory structure goes from:
 #
 #   manuscript1/
 #     folio1/
@@ -69,6 +69,19 @@
 #   image1ccc
 #   image2aaa
 #   image2ccc
+#
+#
+# IMPORTANT:
+#
+# If new manuscripts are added, new folios are added to a manuscript, new
+# images added to a folio directory, or new substrings (algorithms) are added
+# to substring-list, then just run this script again.
+#
+# However, if one or more folios with included images, or included images
+# themselves, are removed from the directory structure, or if one or more
+# substrings are removed from the substrings file, then it would be best to
+# run 'undo-move-to-default-includes.sh' first to make sure everything is in
+# sync, then re-run this script.
 
 if [ ! -e $1 ]
 then
