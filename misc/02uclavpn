@@ -1,0 +1,77 @@
+#!/bin/bash
+#####################################
+# http://askubuntu.com/questions/13963/call-script-after-connecting-to-a-wireless-network/14107
+#####################################
+# MounterBeast Script
+# /etc/NetworkManager/dispatcher.d/02uclavpn
+# Copyright 2011 Nathan E. Williams
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Usage:
+# This script must be customized for your configuration.
+# By default, the script will attempt to mount a CIFS share
+# when a specified MAC address is found at the network gateway,
+# or over sshfs if the MAC address of the gateway is not the specified MAC.
+# e.g. I mount over CIFS to the servers internal IP when at home, and
+# over sshfs when away from home.
+#
+# id gateway mac without physically checking the sticker:
+# $ arp -n -a $(ip route show 0.0.0.0/0 | awk '{print $3}') | awk '{print $4}'
+#
+# Testing:
+# up) sudo /etc/NetworkManager/dispatcher.d/02remotemount wlan0 up
+# down) sudo /etc/NetworkManager/dispatcher.d/02remotemount wlan0 down
+#####################################
+#
+# Configuration:
+#
+target_uuid='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+mount_user='JIRA username'
+mount_pass='JIRA password'
+local_mount_point_base='/path/to/base/of/local/mount/point'
+
+remote_ip1='ip.of.remote.machine1'
+remote_share_name1='/path/to/remote/filesystem/to/mount1'
+local_mount_point1=$mount_point_base_dir'/path/to/local/mount/point1'
+
+remote_ip2='ip.of.remote.machine2'
+remote_share_name2='/path/to/remote/filesystem/to/mount2'
+local_mount_point2=$mount_point_base_dir'/path/to/local/mount/point2'
+
+# ...
+
+if [[ "$target_uuid" == "$CONNECTION_UUID" ]]
+then
+    case "$2" in
+        vpn-up)
+            mount -t cifs -o username=$mount_user,password=$mount_pass \
+                //${remote_ip1}${remote_share_name1} ${local_mount_point1}
+            mount -t cifs -o username=$mount_user,password=$mount_pass \
+                //${remote_ip2}${remote_share_name2} ${local_mount_point2}
+
+            # ...
+
+            ;;
+        vpn-down)
+            umount ${local_mount_point1}
+            umount ${local_mount_point2}
+
+            # ...
+
+            ;;
+    esac
+fi
+
+exit $?
