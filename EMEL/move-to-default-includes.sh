@@ -99,8 +99,14 @@ do
     TMP_DEFAULT_INCLUDED_FILE=${manuscript_dir}/tmp_default_included
 
     # make sure default_included.txt exists
+
     touch ${DEFAULT_INCLUDED_FILE}
-    touch ${TMP_DEFAULT_INCLUDED_FILE}
+
+    # remove any relative paths from DEFAULT_INCLUDED_FILE
+
+    sed -e 's/^.*\///g' ${DEFAULT_INCLUDED_FILE} > ${TMP_DEFAULT_INCLUDED_FILE}
+
+    # record matches in all the folio dirs
 
     FOLIO_DIRS=$(find ${manuscript_dir} -mindepth 1 -maxdepth 1 -type d)
     for folio_dir in ${FOLIO_DIRS}
@@ -120,11 +126,12 @@ do
             then
                 mv --target-directory=${DEFAULT_INCLUDES_DIR} ${MATCHING_FILES}
 
-                # write image file names to tmp
+                # write image file names (not paths) to tmp
 
                 echo ${MATCHING_FILES} \
                     | sed -e 's/ \+/\n/g' \
                     | sed -e '/^.*\.xmp$/d' \
+                    | sed -e 's/^.*\///g' \
                     >> ${TMP_DEFAULT_INCLUDED_FILE}
             fi
         done
@@ -132,9 +139,7 @@ do
 
     # add new filenames to DEFAULT_INCLUDED_FILE
 
-    cat ${DEFAULT_INCLUDED_FILE} ${TMP_DEFAULT_INCLUDED_FILE} \
-        | sort -u \
-        | tee ${DEFAULT_INCLUDED_FILE}
+    sort -u ${TMP_DEFAULT_INCLUDED_FILE} > ${DEFAULT_INCLUDED_FILE}
 
     # remove tmp file
 
