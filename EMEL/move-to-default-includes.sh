@@ -45,7 +45,7 @@
 # to:
 #
 #   manuscript1/
-#     default_included.txt
+#     manuscript1_includes.csv
 #     folio1/
 #       default_includes/
 #         image1aaa.tif
@@ -63,7 +63,7 @@
 #       image2ddd.tif
 #       image2ddd.tif.xmp
 #
-# where default_included.txt has the contents:
+# where manuscript1_includes.csv has the contents:
 #
 #   image1aaa
 #   image1ccc
