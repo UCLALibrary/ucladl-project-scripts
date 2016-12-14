@@ -17,7 +17,8 @@ MANUSCRIPT_DIRS=$(find ${MANUSCRIPTS_DIR} -mindepth 1 -maxdepth 1 -type d)
 
 for manuscript_dir in ${MANUSCRIPT_DIRS}
 do
-    DEFAULT_INCLUDED_FILE=${manuscript_dir}/default_included.txt 
+    MANUSCRIPT_DIR_BASENAME=$(echo ${manuscript_dir} | sed -e 's/^.*\///g')
+    DEFAULT_INCLUDED_FILE=${manuscript_dir}/${MANUSCRIPT_DIR_BASENAME}_includes.csv
     rm ${DEFAULT_INCLUDED_FILE}
 
     FOLIO_DIRS=$(find ${manuscript_dir} -mindepth 1 -maxdepth 1 -type d)

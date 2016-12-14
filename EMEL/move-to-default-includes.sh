@@ -89,13 +89,16 @@ then
     exit 1
 fi
 
+EXTRACT_BASENAME_REGEXP='s/^.*\///g'
+
 SUBSTRINGS=$(tr -d '\r' < $1)
 MANUSCRIPTS_DIR=$2
 MANUSCRIPT_DIRS=$(find ${MANUSCRIPTS_DIR} -mindepth 1 -maxdepth 1 -type d)
 
 for manuscript_dir in ${MANUSCRIPT_DIRS}
 do
-    DEFAULT_INCLUDED_FILE=${manuscript_dir}/default_included.txt 
+    MANUSCRIPT_DIR_BASENAME=$(echo ${manuscript_dir} | sed -e ${EXTRACT_BASENAME_REGEXP})
+    DEFAULT_INCLUDED_FILE=${manuscript_dir}/${MANUSCRIPT_DIR_BASENAME}_includes.csv
     TMP_DEFAULT_INCLUDED_FILE=${manuscript_dir}/tmp_default_included
 
     # make sure default_included.txt exists
@@ -104,7 +107,7 @@ do
 
     # remove any relative paths from DEFAULT_INCLUDED_FILE
 
-    sed -e 's/^.*\///g' ${DEFAULT_INCLUDED_FILE} > ${TMP_DEFAULT_INCLUDED_FILE}
+    sed -e ${EXTRACT_BASENAME_REGEXP} ${DEFAULT_INCLUDED_FILE} > ${TMP_DEFAULT_INCLUDED_FILE}
 
     # record matches in all the folio dirs
 
@@ -131,7 +134,7 @@ do
                 echo ${MATCHING_FILES} \
                     | sed -e 's/ \+/\n/g' \
                     | sed -e '/^.*\.xmp$/d' \
-                    | sed -e 's/^.*\///g' \
+                    | sed -e ${EXTRACT_BASENAME_REGEXP} \
                     >> ${TMP_DEFAULT_INCLUDED_FILE}
             fi
         done
