@@ -1,7 +1,7 @@
 xargs -I {} \
     nx upfile \
       -dir \
-      /asset-library/UCLA/dawntest \
+      /asset-library/UCLA/dawntest/[directory] \
       {} << HERE
 image1
 image2
