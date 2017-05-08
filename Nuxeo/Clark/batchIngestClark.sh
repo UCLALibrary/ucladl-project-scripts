@@ -5,6 +5,8 @@
 # Should be run from the same directory as the files. 
 # For similar collections, replace "clark/mss" with appropriate path.
 
+set -euo pipefail
+
 xargs -I {} \
     nx upfile \
       -dir \
