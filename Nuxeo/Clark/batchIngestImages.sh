@@ -5,7 +5,7 @@
 # Should be run from the same directory as the files. 
 # For similar collections, replace "clark/mss" with appropriate path.
 
-filelist=$(find ./ -type f -name '*.tif')
+filelist=$(find ./ -type f -name '*.tif' | cat | sort)
 echo $filelist
 
 xargs -I {} \
