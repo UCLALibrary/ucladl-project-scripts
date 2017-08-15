@@ -35,32 +35,32 @@ for file in os.listdir(filepath):
 			form_numb = []
 			for header in headers: #cycles through headers in tsv file
 				if bool(re.search(r'\d', header)) == True: #checks to see if there is a number in the header
-					if bool(re.search(r'\Creator', header)) == True: #checks to see if specific fields
+					if bool(re.search('Creator', header)) == True: #checks to see if specific fields
 						creator.append(header) #adds header to creator list
 						numb = re.findall("\d+", header) #finds all numbers in creator header
 						for num in numb: # for numbers in found numbers
 							creator_numb.append(int(num)) #append numbers to creators numbers list
-					if bool(re.search(r'\Description ', header)) == True:
+					if bool(re.search('Description ', header)) == True:
 						description.append(header)
 						numb = re.findall("\d+", header)
 						for num in numb:
 							description_numb.append(int(num))
-					if bool(re.search(r'\Name', header)) == True and bool(re.search(r'\Subject', header)):
+					if bool(re.search('Name', header)) == True and bool(re.search('Subject', header)):
 						subject.append(header)
 						numb = re.findall("\d+", header)
 						for num in numb:
 							subject_numb.append(int(num))
-					if bool(re.search(r'\Place', header)) == True:
+					if bool(re.search('Place', header)) == True:
 						place.append(header)
 						numb = re.findall("\d+", header)
 						for num in numb:
 							place_numb.append(int(num))
-					if bool(re.search(r'\Topic', header)) == True and bool(re.search(r'\Subject', header)):
+					if bool(re.search('Topic', header)) == True and bool(re.search('Subject', header)):
 						subject_topic.append(header)
 						numb = re.findall("\d+", header)
 						for num in numb:
 							sub_top_numb.append(int(num))
-					if bool(re.search(r'\Form/Genre', header)) == True:
+					if bool(re.search('Form/Genre', header)) == True:
 						form.append(header)
 						numb = re.findall("\d+", header)
 						for num in numb:
@@ -84,27 +84,27 @@ for file in os.listdir(filepath):
 				if '%d' not in column: #checks for any column that does not have a number
 					if column not in tsv_headers: #checks to see if header in columns.txt are in headers in the tsv file
 						missing.append(column) #if header in columns.txt is not in tsv file, adds header to list
-				if bool(re.search(r'\Creator', column)): #finds creator fields in the required fields list
+				if bool(re.search('Creator', column)): #finds creator fields in the required fields list
 					for numb in set(list(creator_numb)):  #set(list()) removes repeat numbers
 						if column%numb not in headers: #formats the column with the number, checks to see if in tsv file
 							missing.append(column%numb) # if not there add to missing list
-				if bool(re.search(r'\Description ', column)): #finds description fields in the required fields list
+				if bool(re.search('Description ', column)): #finds description fields in the required fields list
 					for numb in set(list(description_numb)):
 						if column%numb not in headers: #formats the column with the number, checks to see if in tsv file
 							missing.append(column%numb) # if not there add to missing list
-				if bool(re.search(r'\Name', column)) and bool(re.search(r'\Subject', column)): #finds subject name fields in the required fields list
+				if bool(re.search('Name', column)) and bool(re.search('Subject', column)): #finds subject name fields in the required fields list
 					for numb in set(list(subject_numb)):
 						if column%numb not in headers: #formats the column with the number, checks to see if in tsv file
 							missing.append(column%numb) # if not there add to missing list
-				if bool(re.search(r'\Place', column)): #finds place fields in the required fields list
+				if bool(re.search('Place', column)): #finds place fields in the required fields list
 					for numb in set(list(place_numb)):
 						if column%numb not in headers: #formats the column with the number, checks to see if in tsv file
 							missing.append(column%numb) # if not there add to missing list
-				if bool(re.search(r'\Topic', column)) and bool(re.search(r'\Subject', column)): #finds subject topic fields in the required fields list
+				if bool(re.search('Topic', column)) and bool(re.search('Subject', column)): #finds subject topic fields in the required fields list
 					for numb in set(list(sub_top_numb)):
 						if column%numb not in headers: #formats the column with the number, checks to see if in tsv file
 							missing.append(column%numb) # if not there add to missing list
-				if bool(re.search(r'\Form/Genre', column)): #finds form/genre fields in the required fields list
+				if bool(re.search('Form/Genre', column)): #finds form/genre fields in the required fields list
 					for numb in set(list(form_numb)):
 						if column%numb not in headers: #formats the column with the number, checks to see if in tsv file
 							missing.append(column%numb) # if not there add to missing list
