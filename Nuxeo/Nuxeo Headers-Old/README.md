@@ -1,5 +1,5 @@
 For this script, make sure to use python3
-1. Download Nuxeo Folder
+1. Download Nuxeo Headers-Old folder
 2. Install Pandas
 
 		pip install pandas
