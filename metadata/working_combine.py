@@ -1,6 +1,12 @@
-#this file requires the following to be installed: pandas
-#this can be done on a machine with python by executing the following command:
+#this file requires the following to be installed: pandas. xlrd, openpyxl
+#included in this repo is requirements file with these packages listed, it allows for the user to install all packages at once
+#this is done by executing the following command:
+#pip install -r workingcombine_requirements.txt
+
+#this can be done manually by executing the following command for each repo:
 #sudo pip install pandas
+#sudo pip install xlrd
+#sudo pip install openpyxl
 
 #this script takes in multiple spreadsheets and combines them into one spreadsheet
 #it does this by having the user feed in a filepath of the spreadsheets, from there the script combines them.
