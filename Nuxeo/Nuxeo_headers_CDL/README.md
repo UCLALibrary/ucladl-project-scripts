@@ -2,7 +2,7 @@
 1. Go to https://console.developers.google.com/
 2. Go to the Library tab
 3. Search for "drive"
-4. Click on the link for "Google Drive API"
+4. Click on the link for *Google Drive API*
 5. Click on the *Enable* button
 6. Click on *Create credentials*
 7. Choose *service account key*
@@ -18,7 +18,7 @@
 		pip install gspread oauth2client
 16. run the script, make sure that the columns.txt file is in the same location as the script. 
 
-*Note:* The script will run on any sheet shared with the email address
+**Note:** The script will run on any sheet shared with the email address
 
 ## nuxeo_headers.py instructions
 For this script, make sure to use python3
