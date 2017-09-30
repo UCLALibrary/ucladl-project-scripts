@@ -1,4 +1,4 @@
-## ucla_google.py instructions
+## cdl_google.py instructions
 1. Go to https://console.developers.google.com/
 2. Go to the Library tab
 3. Search for "drive"
