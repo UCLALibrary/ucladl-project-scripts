@@ -20,7 +20,7 @@
 
 **Note:** The script will run on any sheet shared with the email address
 
-## nuxeo_headers.py instructions
+## cdl_nuxeo_headers.py instructions
 For this script, make sure to use python3
 1. Download Nuxeo Headers-Old folder
 2. Install Pandas
