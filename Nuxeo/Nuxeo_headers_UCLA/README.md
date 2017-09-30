@@ -17,6 +17,7 @@
 	
 		pip install gspread oauth2client
 16. run the script, make sure that the columns.txt file is in the same location as the script. 
+
 Note: The script will run on any sheet shared with the email address
 
 ## nuxeo_headers.py instructions
