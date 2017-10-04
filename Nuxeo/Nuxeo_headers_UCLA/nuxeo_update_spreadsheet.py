@@ -49,27 +49,32 @@ def object_level(filepath):
                     name = 'Date %d' % numb
                     data2[name] = n['properties']['ucldc_schema:date'][datenumb]['date']
                 except:
-                    data2['Date 1'] = ''
+                    name = 'Date %d' % numb
+                    data2[name] = ''
                 try: 
                     name = 'Date %d Type' % numb
                     data2[name] = n['properties']['ucldc_schema:date'][datenumb]['datetype']
                 except:
-                    data2['Date 1 Type'] = ''
+                    name = 'Date %d Type' % numb
+                    data2[name] = ''
                 try:
                     name = 'Date %d Inclusive Start' % numb
                     data2[name] = n['properties']['ucldc_schema:date'][datenumb]['inclusivestart']
                 except:
-                    data2['Date 1 Inclusive Start'] = ''
+                    name = 'Date %d Inclusive Start' % numb
+                    data2[name] = ''
                 try:
                     name = 'Date %d Inclusive End' % numb
                     data2[name] = n['properties']['ucldc_schema:date'][datenumb]['inclusiveend']
                 except:
-                    data2['Date 1 Inclusive End'] = ''
+                    name = 'Date %d Inclusive End' % numb
+                    data2[name] = ''
                 try:
                     name = 'Date %d Single' % numb
                     data2[name] = n['properties']['ucldc_schema:date'][datenumb]['single']
                 except:
-                    data2['Date 1 Single'] = ''
+                    name = 'Date %d Single' % numb
+                    data2[name] = ''
                 datenumb += 1
         else:
             data2['Date 1'] = ''
@@ -94,27 +99,32 @@ def object_level(filepath):
                     name = 'Creator %d Name' % numb
                     data2[name] = n['properties']['ucldc_schema:creator'][creatnumb]['name']
                 except:
-                    data2['Creator 1 Name'] = ''
+                    name = 'Creator %d Name' % numb
+                    data2[name] = ''
                 try: 
                     name = 'Creator %d Name Type' % numb
                     data2[name] = n['properties']['ucldc_schema:creator'][creatnumb]['nametype']
                 except:
-                    data2['Creator 1 Name Type'] = ''
+                    name = 'Creator %d Name Type' % numb
+                    data2[name] = ''
                 try:
                     name = 'Creator %d Role' % numb
                     data2[name] = n['properties']['ucldc_schema:creator'][creatnumb]['role']
                 except:
-                    data2['Creator 1 Role'] = ''
+                    name = 'Creator %d Role' % numb
+                    data2[name] = ''
                 try:
                     name = 'Creator %d Source' % numb
                     data2[name] = n['properties']['ucldc_schema:creator'][creatnumb]['source']
                 except:
-                    data2['Creator 1 Source'] = ''
+                    name = 'Creator %d Source' % numb
+                    data2[name] =  ''
                 try:
                     name = 'Creator %d Authority ID' % numb
                     data2[name] = n['properties']['ucldc_schema:creator'][creatnumb]['authorityid']
                 except:
-                    data2['Creator 1 Authority ID'] = ''
+                    name = 'Creator %d Authority ID' % numb
+                    data2[name] = ''
                 creatnumb += 1
         else:
             data2['Creator 1 Name'] = ''
@@ -130,27 +140,32 @@ def object_level(filepath):
                     name = 'Contributor %d Name' % numb
                     data2[name] = n['properties']['ucldc_schema:contributor'][contnumb]['name']
                 except:
-                    data2['Contributor 1 Name'] = ''
+                    name = 'Contributor %d Name' % numb
+                    data2[name] = ''
                 try: 
                     name = 'Contributor %d Name Type' % numb
                     data2[name] = n['properties']['ucldc_schema:contributor'][contnumb]['nametype']
                 except:
-                    data2['Contributor 1 Name Type'] = ''
+                    name = 'Contributor %d Name Type' % numb
+                    data2[name] = ''
                 try:
                     name = 'Contributor %d Role' % numb
                     data2[name] = n['properties']['ucldc_schema:contributor'][contnumb]['role']
                 except:
-                    data2['Contributor 1 Role'] = ''
+                    name = 'Contributor %d Role' % numb
+                    data2[name] =  ''
                 try:
                     name = 'Contributor %d Source' % numb
                     data2[name] = n['properties']['ucldc_schema:contributor'][contnumb]['source']
                 except:
-                    data2['Contributor 1 Source'] = ''
+                    name = 'Contributor %d Source' % numb
+                    data2[name] = ''
                 try:
                     name = 'Contributor %d Authority ID' % numb
                     data2[name] = n['properties']['ucldc_schema:contributor'][contnumb]['authorityid']
                 except:
-                    data2['Contributor 1 Authority ID'] = ''
+                    name = 'Contributor %d Authority ID' % numb
+                    data2[name] =  ''
                 contnumb += 1
         else:
             data2['Contributor 1 Name'] = ''
@@ -167,12 +182,14 @@ def object_level(filepath):
                     name = "Description %d Note" % numb
                     data2[name] = n['properties']['ucldc_schema:description'][descnumb]['item']
                 except:
-                    data2['Description 1 Note'] = ''
+                    name = "Description %d Note" % numb
+                    data2[name] = ''
                 try:
                     name = "Description %d Type" % numb
                     data2[name] = n['properties']['ucldc_schema:description'][descnumb]['type']
                 except:
-                    data2['Description 1 Type'] = ''
+                    name = "Description %d Type" % numb
+                    data2[name] = ''
                 descnumb += 1
         else:
             data2['Description 1 Note'] = ''
@@ -186,12 +203,14 @@ def object_level(filepath):
                     name = "Language %d" % numb
                     data2[name] = n['properties']['ucldc_schema:language'][langnumb]['language']
                 except:
-                    data2['Language 1'] = ''
+                    name = "Language %d" % numb
+                    data2[name] = ''
                 try:
                     name = "Language %d Code" % numb
                     data2[name] = n['properties']['ucldc_schema:language'][langnumb]['code']
                 except:
-                    data2['Language 1 Code'] = ''
+                    name = "Language %d Code" % numb
+                    data2[name] =  ''
                 langnumb += 1
         else:
             data2['Language 1'] = ''
@@ -217,22 +236,26 @@ def object_level(filepath):
                     name = 'Copyright Holder %d Name' % numb
                     data2[name] = n['properties']['ucldc_schema:rightsholder'][contnumb]['name']
                 except:
-                    data2['Copyright Holder 1 Name'] = ''
+                    name = 'Copyright Holder %d Name' % numb
+                    data2[name] = ''
                 try: 
                     name = 'Copyright Holder %d Name Type' % numb
                     data2[name] = n['properties']['ucldc_schema:rightsholder'][contnumb]['nametype']
                 except:
-                    data2['Copyright Holder 1 Name Type'] = ''
+                    name = 'Copyright Holder %d Name Type' % numb
+                    data2[name] = ''
                 try:
                     name = 'Copyright Holder %d Source' % numb
                     data2[name] = n['properties']['ucldc_schema:rightsholder'][contnumb]['source']
                 except:
-                    data2['Copyright Holder 1 Source'] = ''
+                    name = 'Copyright Holder %d Source' % numb
+                    data2[name] = ''
                 try:
                     name = 'Copyright Holder %d Authority ID' % numb
                     data2[name] = n['properties']['ucldc_schema:rightsholder'][contnumb]['authorityid']
                 except:
-                    data2['Copyright Holder 1 Authority ID'] = ''
+                    name = 'Copyright Holder %d Authority ID' % numb
+                    data2[name] = ''
                 contnumb += 1
         else:
             data2['Copyright Holder 1 Name'] = ''
@@ -273,27 +296,32 @@ def object_level(filepath):
                     name = 'Subject (Name) %d Name' % numb
                     data2[name] = n['properties']['ucldc_schema:subjectname'][subnumb]['name']
                 except:
-                    data2['Subject (Name) 1 Name'] = ''
+                    name = 'Subject (Name) %d Name' % numb
+                    data2[name] = ''
                 try: 
                     name = 'Subject (Name) %d Name Type' % numb
                     data2[name] = n['properties']['ucldc_schema:subjectname'][subnumb]['name_type']
                 except:
-                    data2['Subject (Name) 1 Name Type'] = ''
+                    name = 'Subject (Name) %d Name Type' % numb
+                    data2[name] =  ''
                 try:
                     name = 'Subject (Name) %d Role' % numb
                     data2[name] = n['properties']['ucldc_schema:subjectname'][subnumb]['role']
                 except:
-                    data2['Subject (Name) 1 Role'] = ''
+                    name = 'Subject (Name) %d Role' % numb
+                    data2[name] =  ''
                 try:
                     name = 'Subject (Name) %d Source' % numb
                     data2[name] = n['properties']['ucldc_schema:subjectname'][subnumb]['source']
                 except:
-                    data2['Subject (Name) 1 Source'] = ''
+                    name = 'Subject (Name) %d Source' % numb
+                    data2[name] = ''
                 try:
                     name = 'Subject (Name) %d Authority ID' % numb
                     data2[name] = n['properties']['ucldc_schema:subjectname'][subnumb]['authorityid']
                 except:
-                    data2['Subject (Name) 1 Authority ID'] = ''
+                    name = 'Subject (Name) %d Authority ID' % numb
+                    data2[name] = ''
                 subnumb += 1
         else:
             data2['Subject (Name) 1 Name'] = ''
@@ -309,22 +337,26 @@ def object_level(filepath):
                     name = 'Place %d Name' % numb
                     data2[name] = n['properties']['ucldc_schema:place'][plcnumb]['name']
                 except:
-                    data2['Place 1 Name'] = ''
+                    name = 'Place %d Name' % numb
+                    data2[name] =  ''
                 try:
                     name = 'Place %d Coordinates' % numb
                     data2[name] = n['properties']['ucldc_schema:place'][plcnumb]['coordinates']
                 except:
-                    data2['Place 1 Coordinates'] = ''
+                    name = 'Place %d Coordinates' % numb
+                    data2[name] = ''
                 try:
                     name = 'Place %d Source' % numb
                     data2[name] = n['properties']['ucldc_schema:place'][plcnumb]['source']
                 except:
-                    data2['Place 1 Source'] = ''
+                    name = 'Place %d Source' % numb
+                    data2[name] = ''
                 try:
                     name = 'Place %d Authority ID' % numb
                     data2[name] = n['properties']['ucldc_schema:place'][plcnumb]['authorityid']
                 except:
-                    data2['Place 1 Authority ID'] = ''
+                    name = 'Place %d Authority ID' % numb
+                    data2[name] = ''
                 plcnumb += 1
         else:
             data2['Place 1 Name'] = ''
@@ -339,22 +371,26 @@ def object_level(filepath):
                     name = 'Subject (Topic) %d Heading' % numb
                     data2[name] = n['properties']['ucldc_schema:subjecttopic'][topnumb]['heading']
                 except:
-                    data2['Subject (Topic) 1 Heading'] = ''			
+                    name = 'Subject (Topic) %d Heading' % numb
+                    data2[name] = ''			
                 try:
                     name = 'Subject (Topic) %d Heading Type' % numb
                     data2[name] = n['properties']['ucldc_schema:subjecttopic'][topnumb]['headingtype']
                 except:
-                    data2['Subject (Topic) 1 Heading Type'] = ''
+                    name = 'Subject (Topic) %d Heading Type' % numb
+                    data2[name] = ''
                 try:
                     name = 'Subject (Topic) %d Source' % numb
                     data2[name] = n['properties']['ucldc_schema:subjecttopic'][topnumb]['source']
                 except:
-                    data2['Subject (Topic) 1 Source'] = ''
+                    name = 'Subject (Topic) %d Source' % numb
+                    data2[name] = ''
                 try:
                     name = 'Subject (Topic) %d Authority ID' % numb
                     data2[name] = n['properties']['ucldc_schema:subjecttopic'][topnumb]['authorityid']
                 except:
-                    data2['Subject (Topic) 1 Authority ID'] = ''
+                    name = 'Subject (Topic) %d Authority ID' % numb
+                    data2[name] = ''
                 topnumb += 1
         else:
             data2['Subject (Topic) 1 Heading'] = ''	
@@ -369,17 +405,20 @@ def object_level(filepath):
                     name = 'Form/Genre %d Heading' % numb
                     data2[name] = n['properties']['ucldc_schema:formgenre'][formnumb]['heading']
                 except:
-                    data2['Form/Genre 1 Heading'] = ''			
+                    name = 'Form/Genre %d Heading' % numb
+                    data2[name] = ''			
                 try:
                     name = 'Form/Genre %d Source' % numb
                     data2[name] = n['properties']['ucldc_schema:formgenre'][formnumb]['source']
                 except:
-                    data2['Form/Genre 1 Source'] = ''
+                    name = 'Form/Genre %d Source' % numb
+                    data2[name] = ''
                 try:
                     name = 'Form/Genre %d Authority ID' % numb
                     data2[name] = n['properties']['ucldc_schema:formgenre'][formnumb]['authorityid']
                 except:
-                    data2['Form/Genre 1 Authority ID'] = ''
+                    name = 'Form/Genre %d Authority ID' % numb
+                    data2[name] = ''
                 formnumb += 1
         else:
             data2['Form/Genre 1 Heading'] = ''	
@@ -456,27 +495,32 @@ def item_level(filepath):
                         name = 'Date %d' % numb
                         data2[name] = x['properties']['ucldc_schema:date'][datenumb]['date']
                     except:
-                        data2['Date 1'] = ''
+                        name = 'Date %d' % numb
+                        data2[name] = ''
                     try: 
                         name = 'Date %d Type' % numb
                         data2[name] = x['properties']['ucldc_schema:date'][datenumb]['datetype']
                     except:
-                        data2['Date 1 Type'] = ''
+                        name = 'Date %d Type' % numb
+                        data2[name] =  ''
                     try:
                         name = 'Date %d Inclusive Start' % numb
                         data2[name] = x['properties']['ucldc_schema:date'][datenumb]['inclusivestart']
                     except:
-                        data2['Date 1 Inclusive Start'] = ''
+                        name = 'Date %d Inclusive Start' % numb
+                        data2[name] =  ''
                     try:
                         name = 'Date %d Inclusive End' % numb
                         data2[name] = x['properties']['ucldc_schema:date'][datenumb]['inclusiveend']
                     except:
-                        data2['Date 1 Inclusive End'] = ''
+                        name = 'Date %d Inclusive End' % numb
+                        data2[name] = ''
                     try:
                         name = 'Date %d Single' % numb
                         data2[name] = x['properties']['ucldc_schema:date'][datenumb]['single']
                     except:
-                        data2['Date 1 Single'] = ''
+                        name = 'Date %d Single' % numb
+                        data2[name] =  ''
                     datenumb += 1
             else:
                 data2['Date 1'] = ''
@@ -501,27 +545,32 @@ def item_level(filepath):
                         name = 'Creator %d Name' % numb
                         data2[name] = x['properties']['ucldc_schema:creator'][creatnumb]['name']
                     except:
-                        data2['Creator 1 Name'] = ''
+                        name = 'Creator %d Name' % numb
+                        data2[name] = ''
                     try: 
                         name = 'Creator %d Name Type' % numb
                         data2[name] = x['properties']['ucldc_schema:creator'][creatnumb]['nametype']
                     except:
-                        data2['Creator 1 Name Type'] = ''
+                        name = 'Creator %d Name Type' % numb
+                        data2[name] = ''
                     try:
                         name = 'Creator %d Role' % numb
                         data2[name] = x['properties']['ucldc_schema:creator'][creatnumb]['role']
                     except:
-                        data2['Creator 1 Role'] = ''
+                        name = 'Creator %d Role' % numb
+                        data2[name] = ''
                     try:
                         name = 'Creator %d Source' % numb
                         data2[name] = x['properties']['ucldc_schema:creator'][creatnumb]['source']
                     except:
-                        data2['Creator 1 Source'] = ''
+                        name = 'Creator %d Source' % numb
+                        data2[name] = ''
                     try:
                         name = 'Creator %d Authority ID' % numb
                         data2[name] = x['properties']['ucldc_schema:creator'][creatnumb]['authorityid']
                     except:
-                        data2['Creator 1 Authority ID'] = ''
+                        name = 'Creator %d Authority ID' % numb
+                        data2[name] = ''
                     creatnumb += 1
             else:
                 data2['Creator 1 Name'] = ''
@@ -537,27 +586,32 @@ def item_level(filepath):
                         name = 'Contributor %d Name' % numb
                         data2[name] = x['properties']['ucldc_schema:contributor'][contnumb]['name']
                     except:
-                        data2['Contributor 1 Name'] = ''
+                        name = 'Contributor %d Name' % numb
+                        data2[name] = ''
                     try: 
                         name = 'Contributor %d Name Type' % numb
                         data2[name] = x['properties']['ucldc_schema:contributor'][contnumb]['nametype']
                     except:
-                        data2['Contributor 1 Name Type'] = ''
+                        name = 'Contributor %d Name Type' % numb
+                        data2[name] = ''
                     try:
                         name = 'Contributor %d Role' % numb
                         data2[name] = x['properties']['ucldc_schema:contributor'][contnumb]['role']
                     except:
-                        data2['Contributor 1 Role'] = ''
+                        name = 'Contributor %d Role' % numb
+                        data2[name] = ''
                     try:
                         name = 'Contributor %d Source' % numb
                         data2[name] = x['properties']['ucldc_schema:contributor'][contnumb]['source']
                     except:
-                        data2['Contributor 1 Source'] = ''
+                        name = 'Contributor %d Source' % numb
+                        data2[name] = ''
                     try:
                         name = 'Contributor %d Authority ID' % numb
                         data2[name] = x['properties']['ucldc_schema:contributor'][contnumb]['authorityid']
                     except:
-                        data2['Contributor 1 Authority ID'] = ''
+                        name = 'Contributor %d Authority ID' % numb
+                        data2[name] = ''
                     contnumb += 1
             else:
                 data2['Contributor 1 Name'] = ''
@@ -574,12 +628,14 @@ def item_level(filepath):
                         name = "Description %d Note" % numb
                         data2[name] = x['properties']['ucldc_schema:description'][descnumb]['item']
                     except:
-                        data2['Description 1 Note'] = ''
+                        name = "Description %d Note" % numb
+                        data2[name] = ''
                     try:
                         name = "Description %d Type" % numb
                         data2[name] = x['properties']['ucldc_schema:description'][descnumb]['type']
                     except:
-                        data2['Description 1 Type'] = ''
+                        name = "Description %d Type" % numb
+                        data2[name] = ''
                     descnumb += 1
             else:
                 data2['Description 1 Note'] = ''
@@ -593,12 +649,14 @@ def item_level(filepath):
                         name = "Language %d" % numb
                         data2[name] = x['properties']['ucldc_schema:language'][langnumb]['language']
                     except:
-                        data2['Language 1'] = ''
+                        name = "Language %d" % numb
+                        data2[name] = ''
                     try:
                         name = "Language %d Code" % numb
                         data2[name] = x['properties']['ucldc_schema:language'][langnumb]['code']
                     except:
-                        data2['Language 1 Code'] = ''
+                        name = "Language %d Code" % numb
+                        data2[name] = ''
                     langnumb += 1
             else:
                 data2['Language 1'] = ''
@@ -624,22 +682,26 @@ def item_level(filepath):
                         name = 'Copyright Holder %d Name' % numb
                         data2[name] = x['properties']['ucldc_schema:rightsholder'][contnumb]['name']
                     except:
-                        data2['Copyright Holder 1 Name'] = ''
+                        name = 'Copyright Holder %d Name' % numb
+                        data2[name] = ''
                     try: 
                         name = 'Copyright Holder %d Name Type' % numb
                         data2[name] = x['properties']['ucldc_schema:rightsholder'][contnumb]['nametype']
                     except:
-                        data2['Copyright Holder 1 Name Type'] = ''
+                        name = 'Copyright Holder %d Name Type' % numb
+                        data2[name] = ''
                     try:
                         name = 'Copyright Holder %d Source' % numb
                         data2[name] = x['properties']['ucldc_schema:rightsholder'][contnumb]['source']
                     except:
-                        data2['Copyright Holder 1 Source'] = ''
+                        name = 'Copyright Holder %d Source' % numb
+                        data2[name] = ''
                     try:
                         name = 'Copyright Holder %d Authority ID' % numb
                         data2[name] = x['properties']['ucldc_schema:rightsholder'][contnumb]['authorityid']
                     except:
-                        data2['Copyright Holder 1 Authority ID'] = ''
+                        name = 'Copyright Holder %d Authority ID' % numb
+                        data2[name] = ''
                     contnumb += 1
             else:
                 data2['Copyright Holder 1 Name'] = ''
@@ -680,27 +742,32 @@ def item_level(filepath):
                         name = 'Subject (Name) %d Name' % numb
                         data2[name] = x['properties']['ucldc_schema:subjectname'][subnumb]['name']
                     except:
-                        data2['Subject (Name) 1 Name'] = ''
+                        name = 'Subject (Name) %d Name' % numb
+                        data2[name] = ''
                     try: 
                         name = 'Subject (Name) %d Name Type' % numb
                         data2[name] = x['properties']['ucldc_schema:subjectname'][subnumb]['name_type']
                     except:
-                        data2['Subject (Name) 1 Name Type'] = ''
+                        name = 'Subject (Name) %d Name Type' % numb
+                        data2[name] = ''
                     try:
                         name = 'Subject (Name) %d Role' % numb
                         data2[name] = x['properties']['ucldc_schema:subjectname'][subnumb]['role']
                     except:
-                        data2['Subject (Name) 1 Role'] = ''
+                        name = 'Subject (Name) %d Role' % numb
+                        data2[name] = ''
                     try:
                         name = 'Subject (Name) %d Source' % numb
                         data2[name] = x['properties']['ucldc_schema:subjectname'][subnumb]['source']
                     except:
-                        data2['Subject (Name) 1 Source'] = ''
+                        name = 'Subject (Name) %d Source' % numb
+                        data2[name] = ''
                     try:
                         name = 'Subject (Name) %d Authority ID' % numb
                         data2[name] = x['properties']['ucldc_schema:subjectname'][subnumb]['authorityid']
                     except:
-                        data2['Subject (Name) 1 Authority ID'] = ''
+                        name = 'Subject (Name) %d Authority ID' % numb
+                        data2[name] = ''
                     subnumb += 1
             else:
                 data2['Subject (Name) 1 Name'] = ''
@@ -716,22 +783,26 @@ def item_level(filepath):
                         name = 'Place %d Name' % numb
                         data2[name] = x['properties']['ucldc_schema:place'][plcnumb]['name']
                     except:
-                        data2['Place 1 Name'] = ''
+                        name = 'Place %d Name' % numb
+                        data2[name] = ''
                     try:
                         name = 'Place %d Coordinates' % numb
                         data2[name] = x['properties']['ucldc_schema:place'][plcnumb]['coordinates']
                     except:
-                        data2['Place 1 Coordinates'] = ''
+                        name = 'Place %d Coordinates' % numb
+                        data2[name] = ''
                     try:
                         name = 'Place %d Source' % numb
                         data2[name] = x['properties']['ucldc_schema:place'][plcnumb]['source']
                     except:
-                        data2['Place 1 Source'] = ''
+                        name = 'Place %d Source' % numb
+                        data2[name] =  ''
                     try:
                         name = 'Place %d Authority ID' % numb
                         data2[name] = x['properties']['ucldc_schema:place'][plcnumb]['authorityid']
                     except:
-                        data2['Place 1 Authority ID'] = ''
+                        name = 'Place %d Authority ID' % numb
+                        data2[name] = ''
                     plcnumb += 1
             else:
                 data2['Place 1 Name'] = ''
@@ -746,22 +817,26 @@ def item_level(filepath):
                         name = 'Subject (Topic) %d Heading' % numb
                         data2[name] = x['properties']['ucldc_schema:subjecttopic'][topnumb]['heading']
                     except:
-                        data2['Subject (Topic) 1 Heading'] = ''            
+                        name = 'Subject (Topic) %d Heading' % numb
+                        data2[name] = ''            
                     try:
                         name = 'Subject (Topic) %d Heading Type' % numb
                         data2[name] = x['properties']['ucldc_schema:subjecttopic'][topnumb]['headingtype']
                     except:
-                        data2['Subject (Topic) 1 Heading Type'] = ''
+                        name = 'Subject (Topic) %d Heading Type' % numb
+                        data2[name] = ''
                     try:
                         name = 'Subject (Topic) %d Source' % numb
                         data2[name] = x['properties']['ucldc_schema:subjecttopic'][topnumb]['source']
                     except:
-                        data2['Subject (Topic) 1 Source'] = ''
+                        name = 'Subject (Topic) %d Source' % numb
+                        data2[name] = ''
                     try:
                         name = 'Subject (Topic) %d Authority ID' % numb
                         data2[name] = x['properties']['ucldc_schema:subjecttopic'][topnumb]['authorityid']
                     except:
-                        data2['Subject (Topic) 1 Authority ID'] = ''
+                        name = 'Subject (Topic) %d Authority ID' % numb
+                        data2[name] = ''
                     topnumb += 1
             else:
                 data2['Subject (Topic) 1 Heading'] = ''    
@@ -776,17 +851,20 @@ def item_level(filepath):
                         name = 'Form/Genre %d Heading' % numb
                         data2[name] = x['properties']['ucldc_schema:formgenre'][formnumb]['heading']
                     except:
-                        data2['Form/Genre 1 Heading'] = ''            
+                        name = 'Form/Genre %d Heading' % numb
+                        data2[name] = ''            
                     try:
                         name = 'Form/Genre %d Source' % numb
                         data2[name] = x['properties']['ucldc_schema:formgenre'][formnumb]['source']
                     except:
-                        data2['Form/Genre 1 Source'] = ''
+                        name = 'Form/Genre %d Source' % numb
+                        data2[name] = ''
                     try:
                         name = 'Form/Genre %d Authority ID' % numb
                         data2[name] = x['properties']['ucldc_schema:formgenre'][formnumb]['authorityid']
                     except:
-                        data2['Form/Genre 1 Authority ID'] = ''
+                        name = 'Form/Genre %d Authority ID' % numb
+                        data2[name] = ''
                     formnumb += 1
             else:
                 data2['Form/Genre 1 Heading'] = ''    
