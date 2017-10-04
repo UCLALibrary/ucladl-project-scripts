@@ -1,8 +1,17 @@
 import unicodecsv as csv
 import os 
-filepath = input('Enter Nuxeo File Path: ') 
-choice = input('Object Level (ENTER O) or Item Level (ENTER I): ')
-url = input('Enter Google Sheet URL: ')
+try:
+    filepath = raw_input('Enter Nuxeo File Path: ') 
+except:
+    filepath = input('Enter Nuxeo File Path: ') 
+try:
+    choice = raw_input('Object Level (ENTER O) or Item Level (ENTER I): ')
+except:
+    choice = input('Object Level (ENTER O) or Item Level (ENTER I): ')
+try:
+    url = raw_input('Enter Google Sheet URL: ')
+except:
+    url = input('Enter Google Sheet URL: ')
 from pynux import utils
 
 def object_level(filepath):
