@@ -1,15 +1,25 @@
 ##nuxeo_update_spreadsheet.py
+
 This script will take the filepath of a nuxeo collection and download the files into a TSV file or dump the data directly into a Google sheet, depending upon user choice. It also allows for downloading of metadata from a Object level (container holding images) or Item level (individual images).  The following instructions need to be followed in order for the script to work.
+
 1. pip install unicodecsv (this should already be installed with nuxeo_spreadsheets)
 
 ***Next Steps: only if using Google Sheets***
+
 2. Go to https://console.developers.google.com/
+
 2. Go to the Library tab
+
 3. Search for "drive"
+
 4. Click on the link for *Google Drive API*
+
 5. Click on the *Enable* button
+
 6. Click on *Create credentials*
+
 7. Choose *service account key*
+
 8. Fill out *Service account name, and service account ID*
 9. Make sure Role is Project > Editor
 10. Make sure key type is JSON
