@@ -26,7 +26,7 @@ This script will take the filepath of a nuxeo collection and download the files 
 11. Rename the automatically downloaded file to *client_secret.json*
 12. Open the *client_secret.json*
 13. In the file find the *client_email* line, copy the email address
-14. Share the folder holding the spreadsheets with the email address in the file
+14. Share the spreadsheet where you want the data dumped to. This can be a new spreadsheet.
 15. In the command line run
 	
 		pip install gspread oauth2client
