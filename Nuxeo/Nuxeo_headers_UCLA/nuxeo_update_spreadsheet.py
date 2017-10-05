@@ -915,6 +915,7 @@ def google_object(filepath, url):
         s = f.read().replace("\t", ",") + '\n' 
     sheet_id = client.open_by_url(url).id
     client.import_csv(sheet_id, s)
+    client.open_by_key(sheet_id).sheet1.update_title("nuxeo_object_%s"%nx.get_metadata(path=filepath)['properties']['dc:title'])
     os.remove("nuxeo_object_%s.tsv"%nx.get_metadata(path=filepath)['properties']['dc:title'])
 def google_item(filepath, url):
     import gspread
@@ -929,12 +930,13 @@ def google_item(filepath, url):
         s = f.read().replace("\t", ",") + '\n' 
     sheet_id = client.open_by_url(url).id
     client.import_csv(sheet_id, s)
+    client.open_by_key(sheet_id).sheet1.update_title("nuxeo_item_%s"%nx.get_metadata(path=filepath)['properties']['dc:title'])
     os.remove("nuxeo_item_%s.tsv"%nx.get_metadata(path=filepath)['properties']['dc:title'])
-if 'O' in choice and 'https' not in url:
+if 'O' in choice or 'o' in choice and 'https' not in url:
     object_level(filepath)
-if 'I' in choice and 'https' not in url:
+if 'I' in choice or 'i' in choice and 'https' not in url:
     item_level(filepath)
-if 'O' in choice and 'https' in url:
+if 'O' in choice or 'o' in choice and 'https' in url:
     google_object(filepath, url)
-if 'I' in choice and 'https' in url:
+if 'I' in choice or 'i' in choice and 'https' in url:
     google_item(filepath, url)
