@@ -3,6 +3,7 @@
 This script will take the filepath of a nuxeo collection and download the files into a TSV file or dump the data directly into a Google sheet, depending upon user choice. It also allows for downloading of metadata from a Object level (container holding images) or Item level (individual images).  The following instructions need to be followed in order for the script to work.
 
 1. pip install unicodecsv (this should already be installed with nuxeo_spreadsheets)
+2. pip install git+git://github.com/ucldc/pynux.git  (this should already be installed with nuxeo_spreadsheets)
 
 ***Next Steps: only if using Google Sheets***
 
