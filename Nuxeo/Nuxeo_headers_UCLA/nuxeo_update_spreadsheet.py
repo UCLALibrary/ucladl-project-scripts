@@ -890,7 +890,10 @@ def google_item(filepath, url):
 
 if 'O' in choice or 'o' in choice:
     if 'http' in url:
-        google_object(filepath, url)
+        try:
+            google_object(filepath, url)
+        except:
+            print("\n*********\nWriting to Google document did not work. Make sure that Google document has been shared with API key email address")
     else:
         obj = object_level(filepath)
         with open(obj['filename'], "wb") as csvfile:
@@ -899,9 +902,12 @@ if 'O' in choice or 'o' in choice:
             for row in obj['data']:
                 writer.writerow(row) 
 if 'I' in choice or 'i' in choice:
-    if 'http' not in url:
-        google_item(filepath, url)
-    else:    
+    if 'http' in url:
+        try:
+            google_item(filepath, url)
+        except:
+            print("\n*********\nWriting to Google document did not work. Make sure that Google document has been shared with API key email address")
+    else:  
         item = item_level(filepath)
         with open(item['filename'], "wb") as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=item['fieldnames'], delimiter="\t")
