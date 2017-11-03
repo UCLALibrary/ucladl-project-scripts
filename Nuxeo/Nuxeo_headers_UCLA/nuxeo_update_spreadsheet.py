@@ -1,3 +1,9 @@
+#Written by Niqui O'Neill
+#This script requires unicodecsv to be installed
+#This script allows the users to download metadata from nuxeo and place it either in a google spreadsheet or tsv file
+#it also allows for metadata to be downloaded from the collection or item level
+#it also asks if all headers should be downloaded or if the empty items should not be downloaded
+#Nuxeo has to be installed for this script to work
 import unicodecsv as csv
 import os
 try:
@@ -19,19 +25,19 @@ except:
 
 from pynux import utils
 
-def get_title(data2, x):
+def get_title(data2, x): #gets title
     data2['Title'] = x['properties']['dc:title']
 
-def get_filepath(data2, x):
+def get_filepath(data2, x): #gets filepath
     data2['File path'] = x['path']
 
-def get_type(data2, x, all_headers):
+def get_type(data2, x, all_headers): #gets type, inputs are dictionary (data2), nuxeo (x), all_headers input
     if x['properties']['ucldc_schema:type'] != None and x['properties']['ucldc_schema:type'] != '':
         data2['Type'] = x['properties']['ucldc_schema:type']
     elif all_headers == 'y' or all_headers == 'Y':
         data2['Type'] = ''
 
-def get_alt_title(data2, x, all_headers):
+def get_alt_title(data2, x, all_headers): 
     altnumb = 0
     if type(x['properties']['ucldc_schema:alternativetitle']) == list and len(x['properties']['ucldc_schema:alternativetitle']) > 0:
         while altnumb < len(x['properties']['ucldc_schema:alternativetitle']):
@@ -331,41 +337,41 @@ def get_rights_status(data2, x, all_headers):
 def get_copyright_holder(data2, x, all_headers):
     rightsnumb = 0
     if type(x['properties']['ucldc_schema:rightsholder']) == list and len(x['properties']['ucldc_schema:rightsholder']) > 0:
-        while contnumb < len(x['properties']['ucldc_schema:rightsholder']):
-            numb = contnumb + 1
+        while rightsnumb < len(x['properties']['ucldc_schema:rightsholder']):
+            numb = rightsnumb + 1
             try:
                 name = 'Copyright Holder %d Name' % numb
-                if x['properties']['ucldc_schema:rightsholder'][contnumb]['name'] != None and x['properties']['ucldc_schema:rightsholder'][contnumb]['name'] != '':
-                    data2[name] = x['properties']['ucldc_schema:rightsholder'][contnumb]['name']
+                if x['properties']['ucldc_schema:rightsholder'][rightsnumb]['name'] != None and x['properties']['ucldc_schema:rightsholder'][rightsnumb]['name'] != '':
+                    data2[name] = x['properties']['ucldc_schema:rightsholder'][rightsnumb]['name']
                 elif all_headers == 'y' or all_headers == 'Y':
                     data2[name] = ''
             except:
                 pass
             try:
                 name = 'Copyright Holder %d Name Type' % numb
-                if x['properties']['ucldc_schema:rightsholder'][contnumb]['nametype'] != None and x['properties']['ucldc_schema:rightsholder'][contnumb]['nametype'] != '':
-                    data2[name] = x['properties']['ucldc_schema:rightsholder'][contnumb]['nametype']
+                if x['properties']['ucldc_schema:rightsholder'][rightsnumb]['nametype'] != None and x['properties']['ucldc_schema:rightsholder'][rightsnumb]['nametype'] != '':
+                    data2[name] = x['properties']['ucldc_schema:rightsholder'][rightsnumb]['nametype']
                 elif all_headers == 'y' or all_headers == 'Y':
                     data2[name] = ''
             except:
                 pass
             try:
                 name = 'Copyright Holder %d Source' % numb
-                if x['properties']['ucldc_schema:rightsholder'][contnumb]['source'] != None and x['properties']['ucldc_schema:rightsholder'][contnumb]['source'] != '':
-                    data2[name] = x['properties']['ucldc_schema:rightsholder'][contnumb]['source']
+                if x['properties']['ucldc_schema:rightsholder'][rightsnumb]['source'] != None and x['properties']['ucldc_schema:rightsholder'][rightsnumb]['source'] != '':
+                    data2[name] = x['properties']['ucldc_schema:rightsholder'][rightsnumb]['source']
                 elif all_headers == 'y' or all_headers == 'Y':
                     data2[name] = ''
             except:
                 pass
             try:
                 name = 'Copyright Holder %d Authority ID' % numb
-                if x['properties']['ucldc_schema:rightsholder'][contnumb]['authorityid'] != None and x['properties']['ucldc_schema:rightsholder'][contnumb]['authorityid'] != '':
-                    data2[name] = x['properties']['ucldc_schema:rightsholder'][contnumb]['authorityid']
+                if x['properties']['ucldc_schema:rightsholder'][rightsnumb]['authorityid'] != None and x['properties']['ucldc_schema:rightsholder'][rightsnumb]['authorityid'] != '':
+                    data2[name] = x['properties']['ucldc_schema:rightsholder'][rightsnumb]['authorityid']
                 elif all_headers == 'y' or all_headers == 'Y':
                     data2[name] = ''
             except:
                 pass
-            contnumb += 1
+            rightsnumb += 1
     elif all_headers == 'y' or all_headers == 'Y':
         data2['Copyright Holder 1 Name'] = ''
         data2['Copyright Holder 1 Name Type'] = ''
@@ -669,7 +675,7 @@ def object_level(filepath):
 
         data.append(data2)
 
-    fieldnames = ['File path', 'Title', 'Type']
+    fieldnames = ['File path', 'Title', 'Type'] #ensures that File path, Title and Type are the first three rows
     for data2 in data:
         for key, value in data2.items():
             if key not in fieldnames:
@@ -714,17 +720,16 @@ def item_level(filepath):
             get_form_genre(data2, x, all_headers)
             get_provenance(data2, x, all_headers)
             get_physical_location(data2, x, all_headers)
-
             data.append(data2)
 
-    fieldnames = ['File path', 'Title', 'Type']
+    fieldnames = ['File path', 'Title', 'Type'] #ensures that File path, Title and Type are the first three rows
     for data2 in data:
         for key, value in data2.items():
             if key not in fieldnames:
                 fieldnames.append(key)
 
     return {'fieldnames':fieldnames, 'data':data, 'filename':"nuxeo_item_%s.tsv"%nx.get_metadata(path=filepath)['properties']['dc:title']}
-
+	#returns dictionary with fieldnames, data and filename; This is used for google functions and writing to tsv if google function not choosed
 
 def google_object(filepath, url):
     import gspread
@@ -756,17 +761,17 @@ def google_item(filepath, url):
     'https://www.googleapis.com/auth/drive']
     creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
     client = gspread.authorize(creds)
-    with open("temp.csv", "wb") as csvfile:
+    with open("temp.csv", "wb") as csvfile: #creates temporary csv file
         writer = csv.DictWriter(csvfile, fieldnames=item['fieldnames'])
         writer.writeheader()
         for row in item['data']:
             writer.writerow(row)
-    with open("temp.csv", encoding="utf8") as f:
+    with open("temp.csv", encoding="utf8") as f: #opens and reads temporary csv file
         s = f.read() + '\n'
-    sheet_id = client.open_by_url(url).id
-    client.import_csv(sheet_id, s)
+    sheet_id = client.open_by_url(url).id 
+    client.import_csv(sheet_id, s)#writes csv file to google sheet
     client.open_by_key(sheet_id).sheet1.update_title("nuxeo_item_%s"%nx.get_metadata(path=filepath)['properties']['dc:title'])
-    os.remove("temp.csv")
+    os.remove("temp.csv") #removes temporary csv
 
 if 'O' in choice or 'o' in choice:
     if 'http' in url:
