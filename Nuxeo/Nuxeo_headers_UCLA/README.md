@@ -1,8 +1,9 @@
-##nuxeo_update_spreadsheet.py
+## nuxeo_update_spreadsheet.py
 
 This script will take the filepath of a nuxeo collection and download the files into a TSV file or dump the data directly into a Google sheet, depending upon user choice. It also allows for downloading of metadata from a Object level (container holding images) or Item level (individual images).  The following instructions need to be followed in order for the script to work.
 
 1. pip install unicodecsv (this should already be installed with nuxeo_spreadsheets)
+2. pip install git+git://github.com/ucldc/pynux.git  (this should already be installed with nuxeo_spreadsheets)
 
 ***Next Steps: only if using Google Sheets***
 
@@ -26,7 +27,7 @@ This script will take the filepath of a nuxeo collection and download the files 
 11. Rename the automatically downloaded file to *client_secret.json*
 12. Open the *client_secret.json*
 13. In the file find the *client_email* line, copy the email address
-14. Share the folder holding the spreadsheets with the email address in the file
+14. Share the spreadsheet where you want the data dumped to. This can be a new spreadsheet.
 15. In the command line run
 	
 		pip install gspread oauth2client
@@ -34,6 +35,8 @@ This script will take the filepath of a nuxeo collection and download the files 
 
 
 ## ucla_google.py instructions
+
+This script checks to ensure all the columns in the columns.txt are in the spreadsheets that have been shared with the email address in step 14. If there are missing headers, it adds the missing headers.
 1. Go to https://console.developers.google.com/
 2. Go to the Library tab
 3. Search for "drive"
@@ -56,6 +59,8 @@ This script will take the filepath of a nuxeo collection and download the files 
 **Note:** The script will run on any sheet shared with the email address
 
 ## ucla_nuxeo_headers.py instructions
+
+This script checks to ensure all the columns in the columns.txt are in the spreadsheets in the filepath entered in step 5. If there are missing headers, it adds the missing headers.
 For this nuxeo headers, make sure to use python3 
 1. Download Nuxeo Headers-Old folder
 2. Install Pandas
