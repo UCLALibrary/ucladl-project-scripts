@@ -2,10 +2,12 @@
 # "${PWD##*/}" prints the current directory w/out path.
 # Used for Clark manuscripts.
 # Imports all .tif files in the directory.
-# Should be run from the same directory as the files. 
+# Should be run from the same directory as the files.
 # For similar collections, replace "clark/mss" with appropriate path.
 
-set -euo pipefail
+#! /bin/bash
+set -e
+set -o pipefail
 
 xargs -I {} \
     nx upfile \
