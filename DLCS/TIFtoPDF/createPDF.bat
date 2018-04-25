@@ -1,0 +1,1 @@
+for /f "usebackq eol=; tokens=1 delims=," %%a IN (manifestPages.txt) do convert %%a pdf\%%a.pdf
