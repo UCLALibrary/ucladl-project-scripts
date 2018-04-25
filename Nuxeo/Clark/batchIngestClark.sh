@@ -2,7 +2,7 @@
 # "${PWD##*/}" prints the current directory w/out path.
 # Used for Clark manuscripts.
 # Imports all .tif files in the directory.
-# Should be run from the same directory as the files. 
+# Should be run from the same directory as the files.
 # For similar collections, replace "clark/mss" with appropriate path.
 
 set -euo pipefail
@@ -10,5 +10,5 @@ set -euo pipefail
 xargs -I {} \
     nx upfile \
       -dir \
-      /asset-library/UCLA/clark/mss/"${PWD##*/}" \
+      /asset-library/UCLA/clark/annotated/"${PWD##*/}" \
        {} < ls *.tif
