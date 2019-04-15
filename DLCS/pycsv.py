@@ -14,7 +14,7 @@ def clean(dirty):
     return dirty.replace('\r', '').replace('\n', '')
 
 metadata = {}
-csvHeaders = ['Project Name','Item Ark', 'Parent Ark', 'Object Type', 'File Name']
+csvHeaders = ['Project Name','Item Ark', 'Parent Ark', 'Object Type', 'File Name', 'Item Sequence']
 nRows = 0
 
 
@@ -36,6 +36,7 @@ for row in cursor:
     parent_ark = row['PARENT_ARK']
     object_type = row['OBJECT_TYPE']
     file_name = row['FILE_NAME']
+    item_seq = row['ITEM_SEQUENCE']
 
     nRows += 1
     # check if we've started accounting for this item yet
@@ -46,7 +47,7 @@ for row in cursor:
             'Parent Ark': parent_ark,
             'Object Type': object_type,
             'File Name': file_name,
-            'Item Sequence': ''
+            'Item Sequence': item_seq
         }
     #if qualifier_label is None or is "":
     if qualifier_label == False or len(qualifier_label) <= 0:
