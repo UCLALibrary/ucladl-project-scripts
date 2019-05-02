@@ -1,0 +1,40 @@
+import requests
+from bs4 import BeautifulSoup
+import lxml
+import csv
+
+#creates a csv file for PIDs and URLs to go before generating them
+
+with open('sitemap_idep.csv', 'w') as csvfile:
+	writer = csv.writer(csvfile)
+	writer.writerow(['PID', 'URL'])
+
+
+#the solr index sitemap needs to be paged through so this range adds the start place to the end of the url
+
+for num in range (0, 260000, 10000):
+	
+	page = 'https://dl.library.ucla.edu/solr/select?q=PID:*&fl=PID&fq=mods_relatedItem_program_titleInfo_title_ms:%22International%20Digital%20Ephemera%20Project%22&rows=10000&start=' + str(num)
+	print(page)
+	r = requests.get(page)
+	r.text
+
+	soup = BeautifulSoup(r.text, 'html.parser')
+
+	list = soup.find_all('str')
+
+	#this loops through all the str tags, strips some text out, and then appends to the appropriate url
+	for i in list:
+		PID = str(i)
+		PID = PID.replace('<str name="PID">', '')
+		PID = PID.replace('</str>', '')
+		URL = 'http://idep.library.ucla.edu/search#!/document/' + PID
+
+#writes this information to the csv file that was created above
+		
+		with open('sitemap_idep.csv', 'a') as csvfile:
+			writer = csv.writer(csvfile)
+			writer.writerow([PID, URL])
+    	
+
+
