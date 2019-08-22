@@ -1,0 +1,2 @@
+Repository name,Repository base URL,OAI-PMH SetSpec,Harvest every X days,Harvest at time T,skip
+'University of California Los Angeles','http://digital2.library.ucla.edu/oai2_0.do','example_set',365,3:00,
