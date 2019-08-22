@@ -11,15 +11,15 @@ You need Python 3 to run this script.
 1. Download the files in this directory to your computer.
 1. Create a virtual environment for the third-party dependencies:
     ```bash
-    python3 -m venv venv_prl_joai_add_harvests
+    $ python3 -m venv venv_prl_joai_add_harvests
     ```
 1. Activate the virtual environment:
     ```bash
-    . venv_prl_joai_add_harvests/bin/activate
+    $ . venv_prl_joai_add_harvests/bin/activate
     ```
 1. Install third-party dependencies:
     ```bash
-    pip install -r requirements.txt
+    $ pip install -r requirements.txt
     ```
 
 
@@ -29,7 +29,7 @@ Running the script takes the user to a REPL that provides usage hints. The scrip
 
 For usage instructions:
 ```bash
-./prl_joai_add_harvests.py -h
+$ ./prl_joai_add_harvests.py -h
 ```
 
 The input CSV file should be filled out with a row for each harvest to add to jOAI. Here are the rules:
