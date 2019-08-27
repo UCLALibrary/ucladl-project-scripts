@@ -91,6 +91,7 @@ def main():
 
                 if action_choice == 'a':
                     # Simulate a form submission.
+                    collection_dir = row['OAI-PMH SetSpec'] or row['Set directory (if entire repository represents one collection)']
                     request_payload = {
                         'shUid': '0',
                         'scheduledHarvest': 'save',
@@ -103,12 +104,10 @@ def main():
                         'shIntervalGranularity': 'days',
                         'shRunAtTime':  row['Harvest at time T'],
                         'shDir': 'custom',
-                        'shHarvestDir': 'harvest/{}/{}'.format(urlparse(row['Repository base URL']).netloc,
-                                                               row['OAI-PMH SetSpec']
-                                                               ),
+                        'shHarvestDir': 'harvest/{}/{}'.format(urlparse(row['Repository base URL']).netloc, collection_dir),
                         's': '+',
                         'shDontZipFiles': 'true',
-                        'shSet': 'dontsplit'
+                        'shSet': 'split' if collection_dir == '' else 'dontsplit'
                     }
                     r = s.post(oai_submit_args['harvester_admin_url'],
                                data=request_payload,
