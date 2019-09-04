@@ -91,7 +91,7 @@ def main():
 
                 if action_choice == 'a':
                     # Simulate a form submission.
-                    collection_dir = row['OAI-PMH SetSpec'] or row['Set directory (if entire repository represents one collection)']
+                    collection_dir = row['OAI-PMH SetSpec'] or row['Set directory']
                     request_payload = {
                         'shUid': '0',
                         'scheduledHarvest': 'save',

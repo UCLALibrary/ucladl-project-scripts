@@ -32,12 +32,29 @@ For usage instructions:
 $ ./prl_joai_add_harvests.py -h
 ```
 
-The input CSV file should be filled out with a row for each harvest to add to jOAI. Here are the rules:
-- The values in the `Repository name`, `Repository base URL`, and `OAI-PMH SetSpec` must be wrapped in single quotes. All other columns must NOT be wrapped in quotes.
-- To harvest an entire repository, leave the `OAI-PMH SetSpec` column blank.
-- `Harvest every X days` must be an integer.
-- `Harvest at time T` must be a datetime formatted like `%H%M` (e.g., `03:00`, `23:59`).
-- To skip a row in the CSV, put something in the `skip` column so that it is not empty.
+The input CSV file should be filled out with a row for each harvest to add to jOAI. Here is the schema:
+
+|field|description|example|
+|---|---|---|
+|`Repository name`|The human-readable name of the institution as it appears on http://prl.library.ucla.edu/institutions. MUST NOT be blank.|`University of California Los Angeles`|
+|`Repository base URL`|The OAI-PMH repository base URL, as specified in https://www.openarchives.org/OAI/openarchivesprotocol.html#HTTPRequestFormat. MUST NOT be blank.|`http://digital2.library.ucla.edu/oai2_0.do`|
+|`OAI-PMH SetSpec`|The OAI-PMH set identifier that specifies the set to be harvested, as specified in https://www.openarchives.org/OAI/openarchivesprotocol.html#Set. Leave blank if harvesting all sets from the repository, or if the entire repository represents one collection for PRL. **See below for usage rules.**|`east_asian_maps`|
+|`Set directory`|A name for the parent directory of the harvested records. Can be any legal UNIX directory name. It is RECOMMENDED to use the `repositoryIdentifier` field in the response to the Identify request on the OAI-PMH repository, as specified in https://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm. **See below for usage rules.**|`library.ucla.edu`|
+|`Harvest every X days`|The number of days between re-harvests. MUST NOT be blank. Must be an integer.|1|
+|`Harvest at time T`|The time of day (PST) to re-harvest at. MUST NOT be blank. Must be a datetime formatted like `%H%M`.|`03:00`|
+|`skip`|Whether or not to skip this row during invocation of the script. May be blank.|`y`|
+
+Further rules:
+- The values in the `Repository name`, `Repository base URL`, and `OAI-PMH SetSpec` MAY be wrapped in single quotes if they contain commas. All other columns MUST NOT be wrapped in quotes.
+- `OAI-PMH SetSpec` and `Set directory` MUST be used as follows:
+
+    |objective|`OAI-PMH SetSpec`|`Set directory`|
+    |---|---|---|
+    |harvest a single set from a repository as a dinstinct PRL collection|fill out|*leave blank*|
+    |harvest an entire repository as a distinct PRL collection|*leave blank*|fill out|
+    |harvest all sets from a repository as dinstinct PRL collections|*leave blank*|*leave blank*|
+
+- `OAI-PMH SetSpec` and `Set directory` MUST NOT both be filled out (both non-empty) at the same time, but they MAY both be blank.
 
 You will probably want to use the CSV file at <https://ucla.app.box.com/file/511596765114>.
 
