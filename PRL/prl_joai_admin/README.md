@@ -1,6 +1,6 @@
-# prl_joai_add_harvests
+# prl_joai_admin
 
-This script is used to programmatically add scheduled harvests to jOAI, eliminating the need to manually fill out and submit a form for each harvest. It functions essentially as a CSV uploader for jOAI.
+This script is used to programmatically administer scheduled harvests on jOAI, eliminating the need to use the web interface to add or remove harvests.
 
 ## System requirements
 
@@ -9,15 +9,15 @@ You need Python 3 to run this script.
 ## Installation
 
 1. Download the files in this directory to your computer.
-1. Create a virtual environment for the third-party dependencies:
+2. Create a virtual environment for the third-party dependencies:
     ```bash
-    $ python3 -m venv venv_prl_joai_add_harvests
+    $ python3 -m venv venv_prl_joai_admin
     ```
-1. Activate the virtual environment:
+3. Activate the virtual environment:
     ```bash
-    $ . venv_prl_joai_add_harvests/bin/activate
+    $ . venv_prl_joai_admin/bin/activate
     ```
-1. Install third-party dependencies:
+4. Install third-party dependencies:
     ```bash
     $ pip install -r requirements.txt
     ```
@@ -29,7 +29,7 @@ Running the script takes the user to a REPL that provides usage hints. The scrip
 
 For usage instructions:
 ```bash
-$ ./prl_joai_add_harvests.py -h
+$ ./prl_joai_admin.py -h
 ```
 
 The input CSV file should be filled out with a row for each harvest to add to jOAI. Here is the schema:
@@ -62,4 +62,4 @@ You will probably want to use the CSV file at <https://ucla.app.box.com/file/511
 
 The script logs errors to rotating logfiles that are each guaranteed not to exceed 1 MiB in size.
 
-If `prl_joai_add_harvests.debug.log.1` exists, it contains older entries than `prl_joai_add_harvests.debug.log`.
+If `prl_joai_admin.debug.log.1` exists, it contains older entries than `prl_joai_admin.debug.log`.
