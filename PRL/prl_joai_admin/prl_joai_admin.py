@@ -30,7 +30,7 @@ def main():
                         action='store_const',
                         const=True,
                         default=False,
-                        help='interactively delete scheduled harvests from jOAI; takes precedence over -i/--csv')
+                        help='interactively delete scheduled harvests from jOAI before attempting to add any; takes precedence over -i/--csv')
     parser.add_argument('-i', '--csv',
                         metavar='FILE',
                         action='store',
@@ -90,7 +90,7 @@ def main():
                             scheduled_harvest['shHarvestedTo']
                             ))
 
-                # If interactive shell is disabled, choose [a]dd every time.
+                # If interactive shell is disabled, choose [r]emove every time.
                 if interactive_shell_enabled:
                     prompt = '[r]emove / [y]es to all / [s]kip / [n]o to all / [h]elp / [q]uit => '
                     action_choice = input(prompt)
