@@ -55,9 +55,9 @@ def write_final_csv(csv, dict_list):
 #parse command line arguments
 parser = argparse.ArgumentParser(description='Run audit of file inventory csv \
                                     vs. folder contents')
-parser.add_argument('input_file',metavar='N', type=str,
+parser.add_argument('input_file',metavar='input', type=str,
                     help='filename of input csv to audit against')
-parser.add_argument('filepath',metavar='N', type=str, nargs='?',
+parser.add_argument('filepath',metavar='path', type=str, nargs='?',
                     default = Path(r'C:\Users\tucke\TestImages'),
                     help='path to files to audit, default = DEFAULT')
 args = parser.parse_args()

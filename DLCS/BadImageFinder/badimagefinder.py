@@ -16,7 +16,7 @@ def isCorrupt(path):
             return True, "Pillow verification failed", img
         elif img.filename[-3:] == "tif" and Image.MIME[img.format] != "image/tiff":
             return True, "Non-TIFF MIME type for .tif file", img
-        elif im.mode not in ("RGB", "RGBA", "L"): #need to know what valid ones are
+        elif img.mode not in ("RGB", "RGBA", "L"): #need to know what valid ones are
             return True, "Invalid color space", img
         else:
             return False, "", img
@@ -60,6 +60,8 @@ for root, dirs, files in os.walk(startPath):
 
             mode, mime = getModeAndMime(im, corrupt)
 
+            size = getFileSizeMB(fullPath)
+
             outputCSV.append([name,
                               fullPath,
                               size,
@@ -67,7 +69,9 @@ for root, dirs, files in os.walk(startPath):
                               mime,
                               corrupt,
                               reason])
-            im.close()
+
+            if im is not None:
+                im.close()
 
 
 #construct output file
