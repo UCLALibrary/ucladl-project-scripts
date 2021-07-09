@@ -21,7 +21,7 @@ def isCorrupt(path):
         else:
             return False, "", img
     except UnidentifiedImageError:
-        return False, "Unable to open file with Pillow", None
+        return True, "Unable to open file with Pillow", None
 
 def getFileSizeMB(filePath):
     size = os.stat(filePath).st_size

@@ -31,25 +31,27 @@ def test_corrupt_invalid_mime():
                                                   'Test Material',
                                                   'invalidMime.tif'))        
     returned_vals = [corrupt, reason, img]
-    #need to think more about this one - how to deal with imgs?    
     assert returned_vals == [True, "Non-TIFF MIME type for .tif file", img]
 
 def test_corrupt_bad_mode():
-    #write this one
-    return True
+    corrupt, reason, img = isCorrupt(os.path.join(script_dir,
+                                                  'Test Material',
+                                                  'smiley_cmyk.tif'))        
+    returned_vals = [corrupt, reason, img]
+    assert returned_vals == [True, "Invalid color space", img]
     
-def test_corrupt_verify_fail():
-    #write
-    return True
 
 def test_corrupt_UIE():
-    #write
-    return True
+    corrupt, reason, img = isCorrupt(os.path.join(script_dir,
+                                                  'Test Material',
+                                                  'smiley_corrupt.tif'))        
+    returned_vals = [corrupt, reason, img]
+    assert returned_vals == [True, "Unable to open file with Pillow", img]
+    
 
 def test_valid_file():
     corrupt, reason, img = isCorrupt(os.path.join(script_dir,
                                                   'Test Material',
                                                   'validImage.tif'))
     returned_vals = [corrupt, reason, img]
-    #need to think more about this one - how to deal with imgs?    
     assert returned_vals == [False, "", img]

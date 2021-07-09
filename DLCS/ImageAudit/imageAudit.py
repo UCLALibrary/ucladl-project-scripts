@@ -9,9 +9,9 @@ def list_diff(l_1,l_2):
     '''returns list of items in first list, but not second'''
     return(list(set(l_1) - set(l_2)))
 
-def get_merged_lists(csv_list, disk_list):
-    csv_extras = list_diff(file_list_csv, file_list_disk)
-    disk_extras = list_diff(file_list_disk, file_list_csv)
+def get_merged_lists(csv_list, disk_list, path):
+    csv_extras = list_diff(csv_list, disk_list)
+    disk_extras = list_diff(disk_list, csv_list)
     out_dict_list = []
     for file in csv_list:
         if file in csv_extras:
@@ -21,7 +21,7 @@ def get_merged_lists(csv_list, disk_list):
             on_disk = True
             on_csv = True
         #format item name as it will be in spreadsheet
-        file = os.path.relpath(file, args.filepath)
+        file = os.path.relpath(file, path)
         file = str(PurePosixPath(PureWindowsPath(file)))
         out_dict_list.append({'File Name': file,
                               'On disk': on_disk,
@@ -30,7 +30,7 @@ def get_merged_lists(csv_list, disk_list):
         on_disk = True
         on_csv = False
         #format item name as it will be in spreadsheet
-        file = os.path.relpath(file, args.filepath)
+        file = os.path.relpath(file, path)
         file = str(PurePosixPath(PureWindowsPath(file)))
         out_dict_list.append({'File Name': file,
                               'On disk': on_disk,
@@ -49,17 +49,18 @@ def write_final_csv(csv, dict_list):
             csv_df.loc[csv_df['File Name'] == item['File Name'], 'On disk'] = False
         elif item['On CSV'] == False and item['On disk'] == True:
             csv_df = csv_df.append(item, ignore_index = True)
-    print(csv_df)
     csv_df.to_csv(args.input_file, index=False)
 
 #parse command line arguments
 parser = argparse.ArgumentParser(description='Run audit of file inventory csv \
                                     vs. folder contents')
-parser.add_argument('input_file',metavar='input', type=str,
+parser.add_argument('input_file',metavar='input', type=str, nargs = '?',
+                    default = (r'C:\Users\tucke\Documents\GitHub\ucladl-project-scripts'
+                     r'\DLCS\ImageAudit\Test Materials\test_export_localized.csv'),
                     help='filename of input csv to audit against')
 parser.add_argument('filepath',metavar='path', type=str, nargs='?',
                     default = Path(r'C:\Users\tucke\TestImages'),
-                    help='path to files to audit, default = DEFAULT')
+                    help='path to files to audit, default = C:\\Users\\tucke\\TestImages')
 args = parser.parse_args()
 
 #read CSV file
@@ -79,6 +80,5 @@ for root, dirs, files in os.walk(args.filepath):
         fullPath = os.path.join(root, name)
         file_list_disk.append(fullPath)
 
-row_dicts = get_merged_lists(file_list_csv, file_list_disk)
-print(row_dicts)
+row_dicts = get_merged_lists(file_list_csv, file_list_disk, args.filepath)
 write_final_csv(args.input_file, row_dicts)
