@@ -55,12 +55,11 @@ def write_final_csv(csv, dict_list):
 parser = argparse.ArgumentParser(description='Run audit of file inventory csv \
                                     vs. folder contents')
 parser.add_argument('input_file',metavar='input', type=str, nargs = '?',
-                    default = (r'C:\Users\tucke\Documents\GitHub\ucladl-project-scripts'
-                     r'\DLCS\ImageAudit\Test Materials\test_export_localized.csv'),
-                    help='filename of input csv to audit against')
+                    default = (r'C:\Zoe\ImageAudit\Test Materials\test_export.csv'),
+                    help=r'filename of input csv to audit against, default = C:\Zoe\ImageAudit\Test Materials\test_export.csv')
 parser.add_argument('filepath',metavar='path', type=str, nargs='?',
-                    default = Path(r'C:\Users\tucke\TestImages'),
-                    help='path to files to audit, default = C:\\Users\\tucke\\TestImages')
+                    default = Path(r'C:\Zoe\ImageAudit\Test Materials\TestImages'),
+                    help=r'path to files to audit, default = C:\Zoe\ImageAudit\Test Materials\TestImages')
 args = parser.parse_args()
 
 #read CSV file

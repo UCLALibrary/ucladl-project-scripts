@@ -1,5 +1,6 @@
 import pytest
 from imageAudit import *
+import pandas as pd
 
 script_dir = os.path.dirname(__file__)
 
@@ -46,3 +47,10 @@ def test_merge_identical():
                   'On disk': True,
                   'On CSV': True}]
     assert get_merged_lists(csv_list, disk_list, script_dir) == out_dicts
+
+def test_csv_writing():
+	test_path = os.path.join(script_dir, 'Test Materials', 'test_export.csv')
+	expected_path = os.path.join(script_dir, 'Test Materials', 'test_export_expected.csv')
+	test_csv = pd.read_csv(test_path)
+	expected_csv = pd.read_csv(expected_path)
+	assert test_csv.equals(expected_csv)
