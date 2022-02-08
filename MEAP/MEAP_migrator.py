@@ -6,9 +6,9 @@ from pathlib import Path
 from pathlib import PureWindowsPath, PurePosixPath
 
 def map_concat_cols(input_df, output_df):
+
     candidate_cols = ['Alt Title','English Translation of Title','Alternative Title']
     present_cols = []
-
     for col in candidate_cols:
         if col in input_df.columns:
             present_cols.append(col)
@@ -16,14 +16,17 @@ def map_concat_cols(input_df, output_df):
 
     candidate_cols = ['Abstract','Abstract | alb','Abtract | eng','Abstract | por']
     present_cols = []
-
     for col in candidate_cols:
         if col in input_df.columns:
             present_cols.append(col)
     output_df['Summary'] = input_df[present_cols].apply(lambda row: '|~|'.join(row.values.astype(str)), axis=1)
     
-    alt_ID_cols = ['local ID', 'collection number']
-    output_df['AltIdentifier.local'] = input_df[alt_ID_cols].apply(lambda row: ' | '.join(row.values.astype(str)), axis=1)
+    candidate_cols =['local ID', 'collection number']
+    present_cols = []
+    for col in candidate_cols:
+        if col in input_df.columns:
+            present_cols.append(col)
+    output_df['AltIdentifier.local'] = input_df[present_cols].apply(lambda row: ' | '.join(row.values.astype(str)), axis=1)
 
     output_df['File Name'] = 'Masters/othermasters/MEAPmigration/ramakatanearchive' + input_df['File name']
 
@@ -52,7 +55,8 @@ def map_simple_cols(input_df, output_df):
                 'Subject':'Subject.conceptTopic',
                 'Title':'Title',
                 'Genre':'Type.genre',
-                'TypeOfResource':'Type.typeOfResource'}
+                'TypeOfResource':'Type.typeOfResource',
+                'Object Type':'Object Type'}
     
     for key in map_dict.keys():
         if key in input_df.columns:
@@ -61,22 +65,32 @@ def map_simple_cols(input_df, output_df):
 
 
 def map_constant_cols(output_df):
-    output_df['Object Type'] = 'Work'
     output_df['viewingHint'] = 'individual'
     return output_df
 
-def add_collection_record(input_df, output_df, cols):
-    
-    collection_row= pd.DataFrame({'Object Type':'Collection','Title':input_df['Digital Collection Title'][1]},
-                    index = [0])
+def add_coll_row(coll_df, works_df):
+    full_df = pd.concat([coll_df,works_df]).reset_index(drop = True)
+    return full_df
 
-    output_df = pd.concat([collection_row,output_df]).reset_index(drop = True)
-    return output_df
-            
+def preprocess_col_names(works_df):
+    if ('Original language title' in works_df.columns) and (
+        'Title' not in works_df.columns):
+        works_df = works_df.rename(columns={'Original language title':'Title'})
+    return works_df
 
+def main(input_directory):
 
-def main(input_file):
-    input_df = pd.read_csv(input_file)
+    for name in os.listdir(input_directory):
+        if 'collection' in name:
+            coll_file = name
+        else:
+            works_file = name
+
+    coll_df = pd.read_csv(os.path.join(input_directory,coll_file))
+    works_df = pd.read_csv(os.path.join(input_directory,works_file))
+    works_df = preprocess_col_names(works_df)
+
+    full_input_df = add_coll_row(coll_df, works_df)
 
     destination_cols=['Object Type','Title',
                       'Item ARK','Parent ARK',
@@ -95,19 +109,21 @@ def main(input_file):
                       'Subject temporal','Item Sequence',
                       'Name.creator', 'Publisher.placeOfOrigin']
     output_df = pd.DataFrame(columns=destination_cols)
+    
 
-    output_df = map_concat_cols(input_df, output_df)
+    output_df = map_concat_cols(full_input_df, output_df)
     output_df = map_constant_cols(output_df)
-    output_df = map_simple_cols(input_df,output_df)
-    output_df = add_collection_record(input_df, output_df, destination_cols)
+    output_df = map_simple_cols(full_input_df,output_df)
+    
 
-    output_df.to_csv('MEAP_output.csv', index=False)
+    output_filename = 'MEAP_output_' + os.path.basename(input_directory) + '.csv'
+    output_df.to_csv(output_filename, index=False)
     
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('input_file',metavar='input', type=str,
-                        help=r'filename of input metadata csv')
-    args = parser.parse_args(args)
-    main(args.input_file)
+    parser.add_argument('input_directory',metavar='input', type=str,
+                        help=r'directory of input metadata csvs')
+    args = parser.parse_args()
+    main(args.input_directory)
