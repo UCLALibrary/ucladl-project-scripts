@@ -67,7 +67,7 @@ def map_simple_cols(input_df, output_df):
 
 
 def map_constant_cols(output_df):
-    output_df['viewingHint'] = 'individual'
+    output_df['viewingHint'] = 'individuals'
     return output_df
 
 def add_coll_row(coll_df, works_df):
@@ -99,13 +99,20 @@ def add_item_pages(items_directory,works_df):
                       'Name.creator', 'Publisher.placeOfOrigin']
     items_df = pd.DataFrame(columns=destination_cols)
     item_files = os.listdir(items_directory)
-    for filename in works_df['File Name'][1:]:
+    filenames = works_df['File Name'][1:]
+    print('Starting adding Page items. Total Work files: ' + str(len(filenames)))
+    tenpct = round(len(filenames)/10)
+    i=0
+    pct = 0
+    pct_count = 0
+    for filename in filenames:
         name = os.path.split(filename)[1]
         file_num = (name.split('.')[0]).split('_')[-1]
         child_items = []
         for item in item_files:
             if file_num in item:
                 child_items.append(item)
+                item_files.remove(item)
 
         parent_ark = works_df.loc[works_df['File Name'] == filename,'Item ARK'].iloc[0]
 
@@ -118,6 +125,11 @@ def add_item_pages(items_directory,works_df):
                                  'Item Sequence':digits.lstrip('0'),
                                  'Parent ARK':parent_ark},index=[0])
                 items_df = pd.concat([df,items_df],ignore_index=True)
+        i=i+1
+        if i > pct:
+            print(str(pct_count) + '% done')
+            pct = pct+tenpct
+            pct_count = pct_count+10
     return items_df
 
 def main(input_directory, items_directory):
@@ -127,11 +139,12 @@ def main(input_directory, items_directory):
             coll_file = name
         else:
             works_file = name
-
+    print('Reading Work and Collection metadata')
     coll_df = pd.read_csv(os.path.join(input_directory,coll_file))
     works_df = pd.read_csv(os.path.join(input_directory,works_file))
-    works_df = preprocess_col_names(works_df)   
-
+    works_df = preprocess_col_names(works_df)
+    
+    print('Adding Collection record to output')
     full_input_df = add_coll_row(coll_df, works_df)
 
     destination_cols=['Object Type','Title',
@@ -150,8 +163,9 @@ def main(input_directory, items_directory):
                       'viewingHint','Subject.conceptTopic',
                       'Subject temporal','Item Sequence',
                       'Name.creator', 'Publisher.placeOfOrigin']
-    output_df = pd.DataFrame(columns=destination_cols)    
-
+    output_df = pd.DataFrame(columns=destination_cols)
+    
+    print('Mapping work-level metadata')
     output_df = map_concat_cols(full_input_df, output_df)
     output_df = map_constant_cols(output_df)
     output_df = map_simple_cols(full_input_df,output_df)
@@ -174,3 +188,4 @@ if __name__ == '__main__':
                         help = 'paginated material only - directory of child items')
     args = parser.parse_args()
     main(args.input_directory, args.items_directory)
+
