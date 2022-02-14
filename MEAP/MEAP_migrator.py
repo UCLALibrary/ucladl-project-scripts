@@ -172,9 +172,11 @@ def main(input_directory, items_directory):
     
     if items_directory:
         items_df = add_item_pages(items_directory,output_df)
+        print('Sorting Page entries')
+        items_df = items_df.sort_values(['File Name','Item Sequence'],
+                                        ascending=[True,True])
         items_filename = 'MEAP_output_' + os.path.basename(input_directory)+'_items' + '.csv'
         items_df.to_csv(items_filename, index=False)
-         
     output_filename = 'MEAP_output_' + os.path.basename(input_directory) + '.csv'
     output_df.to_csv(output_filename, index=False)
     
