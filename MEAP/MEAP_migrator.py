@@ -36,6 +36,8 @@ def map_concat_cols(input_df, output_df):
 
 def map_simple_cols(input_df, output_df):
     map_dict = {'Subject.place':'Coverage.geographic',
+                'Item ARK':'Item ARK',
+                'Parent ARK':'Parent ARK',
                 'Date.created':'Date.creation',
                 'Date.created (single)':'Date.normalized',
                 'Note.content':'Description.note',
@@ -78,7 +80,47 @@ def preprocess_col_names(works_df):
         works_df = works_df.rename(columns={'Original language title':'Title'})
     return works_df
 
-def main(input_directory):
+def add_item_pages(items_directory,works_df):
+    destination_cols=['Object Type','Title',
+                      'Item ARK','Parent ARK',
+                      'Rights.copyrightStatus','File Name',
+                      'AltIdentifier.local','AltTitle.other',
+                      'Coverage.geographic','Date.creation',
+                      'Date.normalized','Description.latitude',
+                      'Description.longitude','Description.note',
+                      'Format.dimensions','Format.extent',
+                      'Format.medium','Language',
+                      'Name.architect','Name.repository',
+                      'Publisher.publisherName','Relation.isPartOf',
+                      'Rights.rightsHolderContact','Type.genre',
+                      'Type.typeOfResource','Summary',
+                      'viewingHint','Subject.conceptTopic',
+                      'Subject temporal','Item Sequence',
+                      'Name.creator', 'Publisher.placeOfOrigin']
+    items_df = pd.DataFrame(columns=destination_cols)
+    item_files = os.listdir(items_directory)
+    for filename in works_df['File Name'][1:]:
+        name = os.path.split(filename)[1]
+        file_num = (name.split('.')[0]).split('_')[-1]
+        child_items = []
+        for item in item_files:
+            if file_num in item:
+                child_items.append(item)
+
+        parent_ark = works_df.loc[works_df['File Name'] == filename,'Item ARK'].iloc[0]
+
+        for child_item in child_items:
+            digits=child_item.split('.')[0].split('_')[-1]
+            if digits not in ['00','000','0000']:
+                df=pd.DataFrame({'File Name':os.path.join(items_directory,child_item),
+                                 'Object Type':'Page',
+                                 'Title':'Page '+digits.lstrip('0'),
+                                 'Item Sequence':digits.lstrip('0'),
+                                 'Parent ARK':parent_ark},index=[0])
+                items_df = pd.concat([df,items_df],ignore_index=True)
+    return items_df
+
+def main(input_directory, items_directory):
 
     for name in os.listdir(input_directory):
         if 'collection' in name:
@@ -88,7 +130,7 @@ def main(input_directory):
 
     coll_df = pd.read_csv(os.path.join(input_directory,coll_file))
     works_df = pd.read_csv(os.path.join(input_directory,works_file))
-    works_df = preprocess_col_names(works_df)
+    works_df = preprocess_col_names(works_df)   
 
     full_input_df = add_coll_row(coll_df, works_df)
 
@@ -108,14 +150,17 @@ def main(input_directory):
                       'viewingHint','Subject.conceptTopic',
                       'Subject temporal','Item Sequence',
                       'Name.creator', 'Publisher.placeOfOrigin']
-    output_df = pd.DataFrame(columns=destination_cols)
-    
+    output_df = pd.DataFrame(columns=destination_cols)    
 
     output_df = map_concat_cols(full_input_df, output_df)
     output_df = map_constant_cols(output_df)
     output_df = map_simple_cols(full_input_df,output_df)
     
-
+    if items_directory:
+        items_df = add_item_pages(items_directory,output_df)
+        items_filename = 'MEAP_output_' + os.path.basename(input_directory)+'_items' + '.csv'
+        items_df.to_csv(items_filename, index=False)
+         
     output_filename = 'MEAP_output_' + os.path.basename(input_directory) + '.csv'
     output_df.to_csv(output_filename, index=False)
     
@@ -123,7 +168,9 @@ def main(input_directory):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('input_directory',metavar='input', type=str,
+    parser.add_argument('input_directory',type=str,
                         help=r'directory of input metadata csvs')
+    parser.add_argument('items_directory',type=str,
+                        help = 'paginated material only - directory of child items')
     args = parser.parse_args()
-    main(args.input_directory)
+    main(args.input_directory, args.items_directory)
