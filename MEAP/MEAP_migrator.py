@@ -98,7 +98,7 @@ def add_item_pages(items_directory,works_df):
                       'Subject temporal','Item Sequence',
                       'Name.creator', 'Publisher.placeOfOrigin']
     items_df = pd.DataFrame(columns=destination_cols)
-    item_files = os.listdir(items_directory)
+    item_files = sorted(os.listdir(items_directory))
     filenames = works_df['File Name'][1:]
     print('Starting adding Page items. Total Work files: ' + str(len(filenames)))
     tenpct = round(len(filenames)/10)
@@ -109,11 +109,10 @@ def add_item_pages(items_directory,works_df):
         name = os.path.split(filename)[1]
         file_num = (name.split('.')[0]).split('_')[-1]
         child_items = []
+
         for item in item_files:
             if file_num in item:
                 child_items.append(item)
-                item_files.remove(item)
-
         parent_ark = works_df.loc[works_df['File Name'] == filename,'Item ARK'].iloc[0]
 
         for child_item in child_items:
