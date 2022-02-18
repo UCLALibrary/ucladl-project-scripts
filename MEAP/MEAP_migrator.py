@@ -66,8 +66,9 @@ def map_simple_cols(input_df, output_df):
     return output_df
 
 
-def map_constant_cols(output_df):
-    output_df['viewingHint'] = 'individuals'
+def map_constant_cols(output_df, is_complex, vh):
+    if is_complex:
+        output_df['viewingHint'] = vh
     return output_df
 
 def add_coll_row(coll_df, works_df):
@@ -131,7 +132,7 @@ def add_item_pages(items_directory,works_df):
             pct_count = pct_count+10
     return items_df
 
-def main(input_directory, items_directory):
+def main(input_directory, items_directory, viewing_hint):
 
     for name in os.listdir(input_directory):
         if 'collection' in name:
@@ -166,7 +167,7 @@ def main(input_directory, items_directory):
     
     print('Mapping work-level metadata')
     output_df = map_concat_cols(full_input_df, output_df)
-    output_df = map_constant_cols(output_df)
+    output_df = map_constant_cols(output_df,items_directory,viewing_hint)
     output_df = map_simple_cols(full_input_df,output_df)
     
     if items_directory:
@@ -175,9 +176,9 @@ def main(input_directory, items_directory):
         items_df = items_df.sort_values(['File Name','Item Sequence'],
                                         ascending=[True,True])
         items_filename = 'MEAP_output_' + os.path.basename(input_directory)+'_items' + '.csv'
-        items_df.to_csv(items_filename, index=False)
+        items_df.to_csv(items_filename, index=False, na_rep='')
     output_filename = 'MEAP_output_' + os.path.basename(input_directory) + '.csv'
-    output_df.to_csv(output_filename, index=False)
+    output_df.to_csv(output_filename, index=False, na_rep='')
     
 
 
@@ -187,6 +188,8 @@ if __name__ == '__main__':
                         help=r'directory of input metadata csvs')
     parser.add_argument('items_directory',type=str,
                         help = 'paginated material only - directory of child items')
+    parser.add_argument('viewing_hint',type=str,
+                        help = 'string to use as viewing hint for child items (complex only)')
     args = parser.parse_args()
-    main(args.input_directory, args.items_directory)
+    main(args.input_directory, args.items_directory, args.viewing_hint)
 
