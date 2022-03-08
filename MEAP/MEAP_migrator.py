@@ -30,6 +30,14 @@ def map_concat_cols(input_df, output_df, works_path):
             present_cols.append(col)
     output_df['AltIdentifier.local'] = input_df[present_cols].apply(lambda row: ' | '.join(row.values.astype(str)), axis=1)
     output_df['AltIdentifier.local'] = output_df['AltIdentifier.local'].replace({'nan':''})
+    
+    candidate_cols =['Date.created (start)', 'Date.created (end)']
+    present_cols = []
+    for col in candidate_cols:
+        if col in input_df.columns:
+            present_cols.append(col)
+    output_df['Date.normalized'] = input_df[present_cols].apply(lambda row: '/'.join(row.values.astype(str)), axis=1)
+    output_df['Date.normalized'] = output_df['Date.normalized'].replace({'nan':''})
 
     output_df['File Name'] = works_path + input_df['File name']
 
@@ -54,6 +62,7 @@ def map_simple_cols(input_df, output_df):
                 'Publisher':'Publisher.publisherName',
                 'collection name':'Relation.isPartOf',
                 'Institution/Repository':'Repository',
+                'Repository':'Repository',
                 'Rights.copyrightStatus':'Rights.copyrightStatus',
                 'Rights.servicesContact':'Rights.rightsHolderContact',
                 'Subject.temporal':'Subject.temporal',
@@ -62,7 +71,6 @@ def map_simple_cols(input_df, output_df):
                 'Genre':'Type.genre',
                 'TypeOfResource':'Type.typeOfResource',
                 'Object Type':'Object Type'}
-    
     for key in map_dict.keys():
         if key in input_df.columns:
             output_df[map_dict[key]] = input_df[key].values
@@ -94,7 +102,7 @@ def add_item_pages(items_directory,works_df):
                       'Description.longitude','Description.note',
                       'Format.dimensions','Format.extent',
                       'Format.medium','Language',
-                      'Name.architect','Name.repository',
+                      'Name.architect','Repository',
                       'Publisher.publisherName','Relation.isPartOf',
                       'Rights.rightsHolderContact','Type.genre',
                       'Type.typeOfResource','Summary',
@@ -155,7 +163,6 @@ def main():
     coll_df = pd.read_csv(os.path.join(input_directory,coll_file))
     works_df = pd.read_csv(os.path.join(input_directory,works_file))
     works_df = preprocess_col_names(works_df)
-    
     print('Adding Collection record to output')
     full_input_df = add_coll_row(coll_df, works_df)
 
@@ -168,7 +175,7 @@ def main():
                       'Description.longitude','Description.note',
                       'Format.dimensions','Format.extent',
                       'Format.medium','Language',
-                      'Name.architect','Name.repository',
+                      'Name.architect','Repository',
                       'Publisher.publisherName','Relation.isPartOf',
                       'Rights.rightsHolderContact','Type.genre',
                       'Type.typeOfResource','Summary',
@@ -176,7 +183,7 @@ def main():
                       'Subject temporal','Item Sequence',
                       'Name.creator', 'Publisher.placeOfOrigin']
     output_df = pd.DataFrame(columns=destination_cols)
-    
+
     print('Mapping work-level metadata')
     output_df = map_concat_cols(full_input_df, output_df, works_directory)
     output_df = map_constant_cols(output_df,items_directory,viewing_hint)
