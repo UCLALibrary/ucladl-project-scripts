@@ -1,76 +1,82 @@
 import pandas as pd
 import argparse
 import csv
+import sys
 import os
 from pathlib import Path
 from pathlib import PureWindowsPath, PurePosixPath
 
 def map_concat_cols(input_df, output_df, works_path):
 
-    candidate_cols = ['Alt Title','English Translation of Title','Alternative Title']
-    present_cols = []
-    for col in candidate_cols:
-        if col in input_df.columns:
-            present_cols.append(col)
-    output_df['AltTitle.other'] = input_df[present_cols].apply(lambda row: '|~|'.join(row.values.astype(str)), axis=1)
-    output_df['AltTitle.other'] = output_df['AltTitle.other'].replace({'nan':''})
-
-    candidate_cols = ['Abstract','Abstract | alb','Abtract | eng','Abstract | por']
-    present_cols = []
-    for col in candidate_cols:
-        if col in input_df.columns:
-            present_cols.append(col)
-    output_df['Summary'] = input_df[present_cols].apply(lambda row: '|~|'.join(row.values.astype(str)), axis=1)
-    output_df['Summary'] = output_df['Summary'].replace({'nan':''})
-	
-    candidate_cols =['local ID', 'collection number']
-    present_cols = []
-    for col in candidate_cols:
-        if col in input_df.columns:
-            present_cols.append(col)
-    output_df['AltIdentifier.local'] = input_df[present_cols].apply(lambda row: ' | '.join(row.values.astype(str)), axis=1)
-    output_df['AltIdentifier.local'] = output_df['AltIdentifier.local'].replace({'nan':''})
+    candidate_cols = ['English Translation of Title','Alternative Title','Translated Title']
+    output_df = concat_helper(input_df, output_df, candidate_cols, 'AltTitle.other')
     
-    candidate_cols =['Date.created (start)', 'Date.created (end)']
-    present_cols = []
-    for col in candidate_cols:
-        if col in input_df.columns:
-            present_cols.append(col)
-    output_df['Date.normalized'] = input_df[present_cols].apply(lambda row: '/'.join(row.values.astype(str)), axis=1)
-    output_df['Date.normalized'] = output_df['Date.normalized'].replace({'nan':''})
+    candidate_cols =['Date.created (start)', 'Date.created (end)', 'Date.created (single)', 'Date.normalized']
+    output_df = concat_helper(input_df, output_df, candidate_cols, 'Date.normalized')
 
-    output_df['File Name'] = works_path + input_df['File name']
+    candidate_cols =['Repository', 'Institution/Repository']
+    output_df = concat_helper(input_df, output_df, candidate_cols, 'Repository')
 
-    
+    candidate_cols =['Subject','Subject.topic']
+    output_df = concat_helper(input_df, output_df, candidate_cols, 'Subject')
+
+    candidate_cols =['Abstract','Summary','Description.note']
+    output_df = concat_helper(input_df, output_df, candidate_cols, 'Description.note')
+
+    candidate_cols =['Rights.servicesContact','Rights.rightsHolderContact']
+    output_df = concat_helper(input_df, output_df, candidate_cols, 'Rights.rightsHolderContact')
+
+    output_df['File Name'] = works_path + '/' + input_df['File name']
     return output_df
 
+def concat_helper(input_df, output_df, candidate_cols, destination_col):
+    present_cols = []
+    for col in candidate_cols:
+        if col in input_df.columns:
+            present_cols.append(col)
+    if len(present_cols) == 2:
+        if 'Date.created (start)' in present_cols:
+            output_df[destination_col] = input_df[present_cols[0]].str.cat(input_df[present_cols[1]],sep='/')
+        else:
+            output_df[destination_col] = input_df[present_cols[0]].str.cat(input_df[present_cols[1]])
+    elif len(present_cols) == 1:
+        output_df[destination_col] = input_df[present_cols[0]]
+    elif len(present_cols) == 3:
+        if 'Date.normalized' in present_cols:
+            output_df[destination_col] = input_df['Date.normalized']
+        elif 'Date.created (single)' in present_cols:
+            output_df[destination_col] = input_df['Date.created (single)']
+        else:
+            output_df[destination_col] = input_df[present_cols[0]].str.cat(input_df[present_cols[1:]],na_rep='')
+    return output_df
 
 def map_simple_cols(input_df, output_df):
-    map_dict = {'Subject.place':'Coverage.geographic',
-                'Item ARK':'Item ARK',
+    map_dict = {'Item ARK':'Item ARK',
                 'Parent ARK':'Parent ARK',
-                'Date.created':'Date.creation',
-                'Date.created (single)':'Date.normalized',
-                'Note.content':'Description.note',
+                'Object Type':'Object Type',
+                'collection name':'collection.physical',
+                'Note.content':'Contents note',
+                'Contributor':'Creator',
+                'Date.created':'Date.created',
+                'Description.latitude':'Description.latitude',
+                'Description.longitude':'Description.longitude',
                 'Dimensions':'Format.dimensions',
                 'Extent':'Format.extent',
                 'Medium':'Format.medium',
+                'Genre':'Genre',
                 'Language | code':'Language',
-                'Contributor.architect':'Name.architect',
+                'local ID':'Local identifier',
                 'Creator':'Name.creator',
-                'Publisher.place':'Publisher.placeOfOrigin',
+                'Subject.name':'Named subject',
+                'Note | eng':'Note',
+                'Publisher.place':'Place of origin',
                 'Publisher':'Publisher.publisherName',
-                'collection name':'Relation.isPartOf',
-                'Institution/Repository':'Repository',
-                'Repository':'Repository',
+                'TypeOfResource':'Resource type',
                 'Rights.copyrightStatus':'Rights.copyrightStatus',
-                'Rights.servicesContact':'Rights.rightsHolderContact',
-                'Subject.temporal':'Subject.temporal',
-                'Subject':'Subject.conceptTopic',
-                'Title':'Title',
-                'Genre':'Type.genre',
-                'TypeOfResource':'Type.typeOfResource',
-                'Object Type':'Object Type'}
+                'Note.statementofresponsibility':'Statement of Responsibility',
+                'Subject.place':'Subject geographic',
+                'Subject.temporal':'Subject temporal',
+                'Title':'Title'}
     for key in map_dict.keys():
         if key in input_df.columns:
             output_df[map_dict[key]] = input_df[key].values
@@ -86,6 +92,15 @@ def add_coll_row(coll_df, works_df):
     full_df = pd.concat([coll_df,works_df]).reset_index(drop = True)
     return full_df
 
+def map_mult_cols(input_df, output_df):
+    dict1 = {'Institution/Repository':'Repository'}
+    dict2 = {'Repository':'Repository'}
+    for key in map_dict.keys():
+            if key in input_df.columns:
+                output_df[map_dict[key]] = input_df[key].values
+    return output_df
+
+
 def preprocess_col_names(works_df):
     if ('Original language title' in works_df.columns) and (
         'Title' not in works_df.columns):
@@ -94,21 +109,21 @@ def preprocess_col_names(works_df):
 
 def add_item_pages(items_directory,works_df):
     destination_cols=['Object Type','Title',
-                      'Item ARK','Parent ARK',
-                      'Rights.copyrightStatus','File Name',
-                      'AltIdentifier.local','AltTitle.other',
-                      'Coverage.geographic','Date.creation',
+                      'Item ARK','Parent ARK','File Name',
+                      'AltTitle.other','collection.physical',
+                      'Contents note', 'Date.created',
                       'Date.normalized','Description.latitude',
                       'Description.longitude','Description.note',
                       'Format.dimensions','Format.extent',
-                      'Format.medium','Language',
-                      'Name.architect','Repository',
-                      'Publisher.publisherName','Relation.isPartOf',
-                      'Rights.rightsHolderContact','Type.genre',
-                      'Type.typeOfResource','Summary',
-                      'viewingHint','Subject.conceptTopic',
-                      'Subject temporal','Item Sequence',
-                      'Name.creator', 'Publisher.placeOfOrigin']
+                      'Format.medium','Genre',
+                      'Language','Local identifier',
+                      'Name.creator','Named subject',
+                      'Note','Place of origin',
+                      'Publisher.publisherName','Repository',
+                      'Resource type', 'Rights.copyrightStatus',
+                      'Rights.rightsHolderContact','Statement of Responsibility',
+                      'Subject','Subject geographic',
+                      'Subject temporal']
     items_df = pd.DataFrame(columns=destination_cols)
     item_files = sorted(os.listdir(items_directory))
     filenames = works_df['File Name'][1:]
@@ -146,13 +161,16 @@ def add_item_pages(items_directory,works_df):
 def main():
     input_directory = input("Enter the directory containing metadata files: ")
     works_directory = input("Enter the directory containing WORK file (e.g. Masters\othermasters...): ")
-    complex = input("Is this a complex (multiple pages per work) collection? Y/N: ")
+    complex_items = input("Is this a complex (multiple pages per work) collection? Y/N: ")
 	
     items_directory = ''
     viewing_hint = ''
-    if complex == "Y" or complex == "y":
-        items_directory = input("Enter the directory containing child item files: ")
-        viewing_hint = input("Enter the viewing hint for all child items: ")
+    if complex_items == "Y" or complex_items == "y":
+        sys.exit("Complex item functionality is not yet implemented.")
+        #items_directory = input("Enter the directory containing child item files: ")
+        #viewing_hint = input("Enter the viewing hint for all child items: ")
+
+    works_directory = PureWindowsPath(works_directory).as_posix()
 
     for name in os.listdir(input_directory):
         if 'collection' in name:
@@ -167,24 +185,25 @@ def main():
     full_input_df = add_coll_row(coll_df, works_df)
 
     destination_cols=['Object Type','Title',
-                      'Item ARK','Parent ARK',
-                      'Rights.copyrightStatus','File Name',
-                      'AltIdentifier.local','AltTitle.other',
-                      'Coverage.geographic','Date.creation',
+                      'Item ARK','Parent ARK','File Name',
+                      'AltTitle.other','collection.physical',
+                      'Contents note', 'Date.created',
                       'Date.normalized','Description.latitude',
                       'Description.longitude','Description.note',
                       'Format.dimensions','Format.extent',
-                      'Format.medium','Language',
-                      'Name.architect','Repository',
-                      'Publisher.publisherName','Relation.isPartOf',
-                      'Rights.rightsHolderContact','Type.genre',
-                      'Type.typeOfResource','Summary',
-                      'viewingHint','Subject.conceptTopic',
-                      'Subject temporal','Item Sequence',
-                      'Name.creator', 'Publisher.placeOfOrigin']
+                      'Format.medium','Genre',
+                      'Language','Local identifier',
+                      'Name.creator','Named subject',
+                      'Note','Place of origin',
+                      'Publisher.publisherName','Repository',
+                      'Resource type', 'Rights.copyrightStatus',
+                      'Rights.rightsHolderContact','Statement of Responsibility',
+                      'Subject','Subject geographic',
+                      'Subject temporal']
     output_df = pd.DataFrame(columns=destination_cols)
 
     print('Mapping work-level metadata')
+    full_input_df = full_input_df.fillna('')
     output_df = map_concat_cols(full_input_df, output_df, works_directory)
     output_df = map_constant_cols(output_df,items_directory,viewing_hint)
     output_df = map_simple_cols(full_input_df,output_df)
@@ -195,8 +214,11 @@ def main():
         items_df = items_df.sort_values(['File Name','Item Sequence'],
                                         ascending=[True,True])
         items_filename = 'MEAP_output_' + os.path.basename(input_directory)+'_items' + '.csv'
+        print('Outputting item-level results to ' + items_filename)
         items_df.to_csv(items_filename, index=False, na_rep='')
+
     output_filename = 'MEAP_output_' + os.path.basename(input_directory) + '.csv'
+    print('Outputting work-level results to ' + output_filename)
     output_df.to_csv(output_filename, index=False, na_rep='')
     
 
