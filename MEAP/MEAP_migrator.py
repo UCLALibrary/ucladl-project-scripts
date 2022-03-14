@@ -36,9 +36,9 @@ def concat_helper(input_df, output_df, candidate_cols, destination_col):
             present_cols.append(col)
     if len(present_cols) == 2:
         if 'Date.created (start)' in present_cols:
-            output_df[destination_col] = input_df[present_cols[0]].str.cat(input_df[present_cols[1]],sep='/')
+            output_df[destination_col] = input_df[present_cols[0]].astype(str).str.cat(input_df[present_cols[1]].astype(str),sep='/')
         else:
-            output_df[destination_col] = input_df[present_cols[0]].str.cat(input_df[present_cols[1]])
+            output_df[destination_col] = input_df[present_cols[0]].astype(str).str.cat(input_df[present_cols[1]].astype(str))
     elif len(present_cols) == 1:
         output_df[destination_col] = input_df[present_cols[0]]
     elif len(present_cols) == 3:
@@ -47,7 +47,7 @@ def concat_helper(input_df, output_df, candidate_cols, destination_col):
         elif 'Date.created (single)' in present_cols:
             output_df[destination_col] = input_df['Date.created (single)']
         else:
-            output_df[destination_col] = input_df[present_cols[0]].str.cat(input_df[present_cols[1:]],na_rep='')
+            output_df[destination_col] = input_df[present_cols[0]].astype(str).str.cat(input_df[present_cols[1:]],na_rep='')
     return output_df
 
 def map_simple_cols(input_df, output_df):
@@ -159,8 +159,8 @@ def add_item_pages(items_directory,works_df):
     return items_df
 
 def main():
-    input_directory = input("Enter the directory containing metadata files: ")
-    works_directory = input("Enter the directory containing WORK file (e.g. Masters\othermasters...): ")
+    input_directory = input("Enter the directory containing metadata files: ").strip()
+    works_directory = input("Enter the master images directory (e.g. Masters\othermasters...): ").strip()
     complex_items = input("Is this a complex (multiple pages per work) collection? Y/N: ")
 	
     items_directory = ''
