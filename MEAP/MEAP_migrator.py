@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import argparse
 import csv
 import sys
@@ -26,7 +27,8 @@ def map_concat_cols(input_df, output_df, works_path):
     candidate_cols =['Rights.servicesContact','Rights.rightsHolderContact']
     output_df = concat_helper(input_df, output_df, candidate_cols, 'Rights.rightsHolderContact')
 
-    output_df['File Name'] = works_path + '/' + input_df['File name']
+    output_df['File Name'] = works_path + input_df['File name']
+    
     return output_df
 
 def concat_helper(input_df, output_df, candidate_cols, destination_col):
@@ -58,7 +60,7 @@ def map_simple_cols(input_df, output_df):
                 'Note.content':'Contents note',
                 'Contributor':'Creator',
                 'Date.created':'Date.created',
-                'Description.latitude':'Description.latitude',
+                'Description.latitudepath':'Description.latitude',
                 'Description.longitude':'Description.longitude',
                 'Dimensions':'Format.dimensions',
                 'Extent':'Format.extent',
@@ -166,11 +168,14 @@ def main():
     items_directory = ''
     viewing_hint = ''
     if complex_items == "Y" or complex_items == "y":
-        sys.exit("Complex item functionality is not yet implemented.")
-        #items_directory = input("Enter the directory containing child item files: ")
-        #viewing_hint = input("Enter the viewing hint for all child items: ")
-
-    works_directory = PureWindowsPath(works_directory).as_posix()
+        items_directory = input("Enter the directory containing child item files: ")
+        viewing_hint = input("Enter the viewing hint for all child items: ")
+    
+    #fix file path
+    works_directory = str(PureWindowsPath(works_directory).as_posix())
+    while works_directory[0] == '\\' or works_directory[0] == '/':
+        works_directory = works_directory[1:]
+    works_directory = works_directory.capitalize()
 
     for name in os.listdir(input_directory):
         if 'collection' in name:
@@ -207,6 +212,8 @@ def main():
     output_df = map_concat_cols(full_input_df, output_df, works_directory)
     output_df = map_constant_cols(output_df,items_directory,viewing_hint)
     output_df = map_simple_cols(full_input_df,output_df)
+    #remove path from collection row
+    output_df['File Name'] = np.where(output_df['Object Type'] == 'Collection', '', output_df['File Name'])
     
     if items_directory:
         items_df = add_item_pages(items_directory,output_df)
