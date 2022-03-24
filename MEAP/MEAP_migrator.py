@@ -9,7 +9,7 @@ from pathlib import PureWindowsPath, PurePosixPath
 
 def map_concat_cols(input_df, output_df, works_path):
 
-    candidate_cols = ['English Translation of Title','Alternative Title','Translated Title']
+    candidate_cols = ['English translation of title','Alternative Title','Translated Title']
     output_df = concat_helper(input_df, output_df, candidate_cols, 'AltTitle.other')
     
     candidate_cols =['Date.created (start)', 'Date.created (end)', 'Date.created (single)', 'Date.normalized']
@@ -27,6 +27,8 @@ def map_concat_cols(input_df, output_df, works_path):
     candidate_cols =['Rights.servicesContact','Rights.rightsHolderContact']
     output_df = concat_helper(input_df, output_df, candidate_cols, 'Rights.rightsHolderContact')
 
+    if works_path[-1] != '/':
+        works_path = works_path + '/'
     output_df['File Name'] = works_path + input_df['File name']
     
     return output_df
@@ -58,9 +60,9 @@ def map_simple_cols(input_df, output_df):
                 'Object Type':'Object Type',
                 'collection name':'collection.physical',
                 'Note.content':'Contents note',
-                'Contributor':'Creator',
+                'Contributor':'Contributor',
                 'Date.created':'Date.created',
-                'Description.latitudepath':'Description.latitude',
+                'Description.latitude':'Description.latitude',
                 'Description.longitude':'Description.longitude',
                 'Dimensions':'Format.dimensions',
                 'Extent':'Format.extent',
@@ -110,29 +112,16 @@ def preprocess_col_names(works_df):
     return works_df
 
 def add_item_pages(items_directory,works_df):
-    destination_cols=['Object Type','Title',
-                      'Item ARK','Parent ARK','File Name',
-                      'AltTitle.other','collection.physical',
-                      'Contents note', 'Date.created',
-                      'Date.normalized','Description.latitude',
-                      'Description.longitude','Description.note',
-                      'Format.dimensions','Format.extent',
-                      'Format.medium','Genre',
-                      'Language','Local identifier',
-                      'Name.creator','Named subject',
-                      'Note','Place of origin',
-                      'Publisher.publisherName','Repository',
-                      'Resource type', 'Rights.copyrightStatus',
-                      'Rights.rightsHolderContact','Statement of Responsibility',
-                      'Subject','Subject geographic',
-                      'Subject temporal']
+    destination_cols=['File Name','Object Type','Title',
+                      'Item Sequence','Item ARK','Parent ARK']
     items_df = pd.DataFrame(columns=destination_cols)
     item_files = sorted(os.listdir(items_directory))
     filenames = works_df['File Name'][1:]
     print('Starting adding Page items. Total Work entries: ' + str(len(filenames)))
     tenpct = round(len(filenames)/10)
+    #to keep track of pct progress
     i=0
-    pct = 0
+    pct = 0 
     pct_count = 0
     for filename in filenames:
         name = os.path.split(filename)[1]
@@ -175,6 +164,7 @@ def main():
     works_directory = str(PureWindowsPath(works_directory).as_posix())
     while works_directory[0] == '\\' or works_directory[0] == '/':
         works_directory = works_directory[1:]
+    works_directory = works_directory.lower()
     works_directory = works_directory.capitalize()
 
     for name in os.listdir(input_directory):
@@ -214,6 +204,8 @@ def main():
     output_df = map_simple_cols(full_input_df,output_df)
     #remove path from collection row
     output_df['File Name'] = np.where(output_df['Object Type'] == 'Collection', '', output_df['File Name'])
+    #if no object type was found, label as work
+    output_df['Object Type'] = np.where(output_df['Object Type'] == '', 'Work', output_df['Object Type'])
     
     if items_directory:
         items_df = add_item_pages(items_directory,output_df)
