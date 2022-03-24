@@ -30,6 +30,9 @@ def map_concat_cols(input_df, output_df, works_path):
     if works_path[-1] != '/':
         works_path = works_path + '/'
     output_df['File Name'] = works_path + input_df['File name']
+    #hack for rajasthanmusic - replace mp3 with wav
+    output_df['File Name'] = np.where(output_df['File Name'].str.contains('.mp3'), output_df['File Name'].str.slice(stop=-4)+'.wav',
+                                    output_df['File Name'])
     
     return output_df
 
@@ -136,7 +139,13 @@ def add_item_pages(items_directory,works_df):
         for child_item in child_items:
             digits=child_item.split('.')[0].split('_')[-1]
             if digits not in ['00','000','0000']:
-                df=pd.DataFrame({'File Name':os.path.join(items_directory,child_item),
+                #fix file path
+                filepath = str(PureWindowsPath(os.path.join(items_directory,child_item)).as_posix())
+                while filepath[0] == '\\' or filepath[0] == '/':
+                    filepath = filepath[1:]
+                filepath = filepath.lower()
+                filepath = filepath.capitalize()
+                df=pd.DataFrame({'File Name':filepath,
                                  'Object Type':'Page',
                                  'Title':'Page '+digits.lstrip('0'),
                                  'Item Sequence':digits.lstrip('0'),
@@ -209,6 +218,8 @@ def main():
     
     if items_directory:
         items_df = add_item_pages(items_directory,output_df)
+        #remove file path from works df if complex
+        output_df['File Name'] = ''
         print('Sorting Page entries')
         items_df = items_df.sort_values(['File Name','Item Sequence'],
                                         ascending=[True,True])
