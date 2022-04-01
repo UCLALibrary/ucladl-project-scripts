@@ -27,8 +27,12 @@ def map_concat_cols(input_df, output_df, works_path):
     candidate_cols =['Rights.servicesContact','Rights.rightsHolderContact']
     output_df = concat_helper(input_df, output_df, candidate_cols, 'Rights.rightsHolderContact')
 
-    candidate_cols =['box number','folder nubmer', 'collection number']
+    candidate_cols =['box number','folder number', 'collection number']
     output_df = concat_helper(input_df, output_df, candidate_cols, 'Local identifier')
+
+    if works_path[-1] != '/':
+        works_path = works_path + '/'
+    output_df['File Name'] = works_path + input_df['File name']
 
     #hack for rajasthanmusic - replace mp3 with wav
     output_df['File Name'] = np.where(output_df['File Name'].str.contains('.mp3'), output_df['File Name'].str.slice(stop=-4)+'.wav',
@@ -41,23 +45,24 @@ def concat_helper(input_df, output_df, candidate_cols, destination_col):
     for col in candidate_cols:
         if col in input_df.columns:
             present_cols.append(col)
-    #special delimiter for local ID
-    if destination_col = 'Local identifier':
-        output_df[destination_col] = input_df[present_cols[0]].astype(str).str.cat(input_df[present_cols[1:]],na_rep='',sep='|~|')
-    elif len(present_cols) == 2:
-        if 'Date.created (start)' in present_cols:
-            output_df[destination_col] = input_df[present_cols[0]].astype(str).str.cat(input_df[present_cols[1]].astype(str),sep='/')
-        else:
-            output_df[destination_col] = input_df[present_cols[0]].astype(str).str.cat(input_df[present_cols[1]].astype(str))
-    elif len(present_cols) == 1:
-        output_df[destination_col] = input_df[present_cols[0]]
-    elif len(present_cols) == 3:
-        if 'Date.normalized' in present_cols:
-            output_df[destination_col] = input_df['Date.normalized']
-        elif 'Date.created (single)' in present_cols:
-            output_df[destination_col] = input_df['Date.created (single)']
-        else:
-            output_df[destination_col] = input_df[present_cols[0]].astype(str).str.cat(input_df[present_cols[1:]],na_rep='')
+    if len(present_cols) > 0:
+        #special delimiter for local ID
+        if destination_col == 'Local identifier':
+            output_df[destination_col] = input_df[present_cols[0]].astype(str).str.cat(input_df[present_cols[1:]],na_rep='',sep='|~|')
+        elif len(present_cols) == 2:
+            if 'Date.created (start)' in present_cols:
+                output_df[destination_col] = input_df[present_cols[0]].astype(str).str.cat(input_df[present_cols[1]].astype(str),sep='/')
+            else:
+                output_df[destination_col] = input_df[present_cols[0]].astype(str).str.cat(input_df[present_cols[1]].astype(str))
+        elif len(present_cols) == 1:
+            output_df[destination_col] = input_df[present_cols[0]]
+        elif len(present_cols) == 3:
+            if 'Date.normalized' in present_cols:
+                output_df[destination_col] = input_df['Date.normalized']
+            elif 'Date.created (single)' in present_cols:
+                output_df[destination_col] = input_df['Date.created (single)']
+            else:
+                output_df[destination_col] = input_df[present_cols[0]].astype(str).str.cat(input_df[present_cols[1:]],na_rep='')
     return output_df
 
 def map_simple_cols(input_df, output_df):
@@ -127,15 +132,11 @@ def add_item_pages(items_directory,works_df):
     destination_cols=['File Name','Object Type','Title',
                       'Item Sequence','Item ARK','Parent ARK']
     items_df = pd.DataFrame(columns=destination_cols)
+    filenames = works_df['File Name'][1:]
+    print('Starting adding Page items. Total Work entries: ' + str(len(filenames)))
+
     for subdir in os.scandir(items_directory):
-        item_files = sorted(os.listdir(items_directory))
-        filenames = works_df['File Name'][1:]
-        print('Starting adding Page items. Total Work entries: ' + str(len(filenames)))
-        #tenpct = round(len(filenames)/10)
-        #to keep track of pct progress
-        #i=0
-        #pct = 0 
-        #pct_count = 0
+        item_files = sorted(os.listdir(subdir))
         for filename in filenames:
             name = os.path.split(filename)[1]
             file_ID = (name.split('.')[0])
@@ -161,11 +162,6 @@ def add_item_pages(items_directory,works_df):
                                     'Item Sequence':digits.lstrip('0'),
                                     'Parent ARK':parent_ark},index=[0])
                     items_df = pd.concat([df,items_df],ignore_index=True)
-            #i=i+1
-            #if i > pct:
-                #print(str(pct_count) + '% done')
-                #pct = pct+tenpct
-                #pct_count = pct_count+10
     return items_df
 
 def main():
