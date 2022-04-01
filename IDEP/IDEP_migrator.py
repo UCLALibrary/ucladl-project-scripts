@@ -82,7 +82,7 @@ def map_simple_cols(input_df, output_df):
                 'Genre':'Genre',
                 'Language | code':'Language',
                 'Creator':'Name.creator',
-                'Creator.Artist':'Name.artist',
+                'Creator.artist':'Name.artist',
                 'Contributor.director':'Name.director',
                 'Contributor.editor':'Name.editor',                
                 'Subject.name':'Named subject',
@@ -221,8 +221,9 @@ def main():
     output_df = map_concat_cols(full_input_df, output_df, works_directory)
     output_df = map_constant_cols(output_df,items_directory,viewing_hint)
     output_df = map_simple_cols(full_input_df,output_df)
-    #remove path from collection row
+    #remove path and local ID from collection row
     output_df['File Name'] = np.where(output_df['Object Type'] == 'Collection', '', output_df['File Name'])
+    output_df['Local identifier'] = np.where(output_df['Object Type'] == 'Collection', '', output_df['Local identifier'])
     #if no object type was found, label as work
     output_df['Object Type'] = np.where(output_df['Object Type'] == '', 'Work', output_df['Object Type'])
     
@@ -233,11 +234,11 @@ def main():
         print('Sorting Page entries')
         items_df = items_df.sort_values(['File Name','Item Sequence'],
                                         ascending=[True,True])
-        items_filename = 'MEAP_output_' + os.path.basename(input_directory)+'_items' + '.csv'
+        items_filename = 'IDEP_output_' + os.path.basename(input_directory)+'_items' + '.csv'
         print('Outputting item-level results to ' + items_filename)
         items_df.to_csv(items_filename, index=False, na_rep='')
 
-    output_filename = 'MEAP_output_' + os.path.basename(input_directory) + '.csv'
+    output_filename = 'IDEP_output_' + os.path.basename(input_directory) + '.csv'
     print('Outputting work-level results to ' + output_filename)
     output_df.to_csv(output_filename, index=False, na_rep='')
     
