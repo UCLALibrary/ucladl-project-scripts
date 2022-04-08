@@ -85,12 +85,12 @@ def map_simple_cols(input_df, output_df):
                 'Creator.artist':'Name.artist',
                 'Contributor.director':'Name.director',
                 'Contributor.editor':'Name.editor',                
-                'Subject.name':'Named subject',
+                'Subject.name':'Name.subject',
                 'Subject.topic':'Subject topic',
                 'Note | eng':'Note',
                 'Publisher.place':'Place of origin',
                 'Publisher':'Publisher.publisherName',
-                'TypeOfResource':'Resource type',
+                'TypeOfResource':'Type.typeOfResource',
                 'Rights.copyrightStatus':'Rights.copyrightStatus',
                 'Note.statementofresponsibility':'Statement of Responsibility',
                 'Subject.place':'Subject geographic',
@@ -151,7 +151,7 @@ def add_item_pages(items_directory,works_df):
                 digits=child_item.split('.')[0].split('_')[-1]
                 if digits not in ['00','000','0000']:
                     #fix file path
-                    filepath = str(PureWindowsPath(os.path.join(items_directory,child_item)).as_posix())
+                    filepath = str(PureWindowsPath(os.path.join(subdir,child_item)).as_posix())
                     while filepath[0] == '\\' or filepath[0] == '/':
                         filepath = filepath[1:]
                     filepath = filepath.lower()
@@ -186,11 +186,15 @@ def main():
     works_directory = works_directory.lower()
     works_directory = works_directory.capitalize()
 
+    works_file = ''
+    coll_file = ''
     for name in os.listdir(input_directory):
         if 'collection' in name:
             coll_file = name
         else:
             works_file = name
+    if not (coll_file and works_file):
+        sys.exit('Unable to find metadata files. Please check file paths.')
     print('Reading Work and Collection metadata')
     coll_df = pd.read_csv(os.path.join(input_directory,coll_file))
     works_df = pd.read_csv(os.path.join(input_directory,works_file))
@@ -207,10 +211,10 @@ def main():
                       'Format.dimensions','Format.extent',
                       'Format.medium','Genre',
                       'Language','Local identifier',
-                      'Name.creator','Named subject',
+                      'Name.creator','Name.subject',
                       'Note','Place of origin',
                       'Publisher.publisherName','Repository',
-                      'Resource type', 'Rights.copyrightStatus',
+                      'Type.typeOfResource', 'Rights.copyrightStatus',
                       'Rights.rightsHolderContact','Statement of Responsibility',
                       'Subject','Subject geographic',
                       'Subject temporal']
