@@ -154,8 +154,6 @@ def add_item_pages(items_directory,works_df):
                     filepath = str(PureWindowsPath(os.path.join(subdir,child_item)).as_posix())
                     while filepath[0] == '\\' or filepath[0] == '/':
                         filepath = filepath[1:]
-                    filepath = filepath.lower()
-                    filepath = filepath.capitalize()
                     df=pd.DataFrame({'File Name':filepath,
                                     'Object Type':'Page',
                                     'Title':'Page '+digits.lstrip('0'),
@@ -183,8 +181,6 @@ def main():
         works_directory = works_directory[1:]
     if works_directory[-1] != '/':
         works_directory = works_directory + '/'
-    works_directory = works_directory.lower()
-    works_directory = works_directory.capitalize()
 
     works_file = ''
     coll_file = ''
