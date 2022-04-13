@@ -112,15 +112,6 @@ def add_coll_row(coll_df, works_df):
     full_df = pd.concat([coll_df,works_df]).reset_index(drop = True)
     return full_df
 
-def map_mult_cols(input_df, output_df):
-    dict1 = {'Institution/Repository':'Repository'}
-    dict2 = {'Repository':'Repository'}
-    for key in map_dict.keys():
-            if key in input_df.columns:
-                output_df[map_dict[key]] = input_df[key].values
-    return output_df
-
-
 def preprocess_col_names(works_df):
     if ('Original language title' in works_df.columns) and (
         'Title' not in works_df.columns):
@@ -136,30 +127,55 @@ def add_item_pages(items_directory,works_df):
     print('Starting adding Page items. Total Work entries: ' + str(len(filenames)))
 
     for subdir in os.scandir(items_directory):
-        item_files = sorted(os.listdir(subdir))
-        for filename in filenames:
-            name = os.path.split(filename)[1]
-            file_ID = (name.split('.')[0])
-            child_items = []
+        if subdir.is_dir():
+            item_files = sorted(os.listdir(subdir))
+            for filename in filenames:
+                name = os.path.split(filename)[1]
+                file_ID = (name.split('.')[0])
+                child_items = []
 
-            for item in item_files:
-                if file_ID in item:
-                    child_items.append(item)
-            parent_ark = works_df.loc[works_df['File Name'] == filename,'Item ARK'].iloc[0]
+                for item in item_files:
+                    if file_ID in item:
+                        child_items.append(item)
+                parent_ark = works_df.loc[works_df['File Name'] == filename,'Item ARK'].iloc[0]
 
-            for child_item in child_items:
-                digits=child_item.split('.')[0].split('_')[-1]
-                if digits not in ['00','000','0000']:
-                    #fix file path
-                    filepath = str(PureWindowsPath(os.path.join(subdir,child_item)).as_posix())
-                    while filepath[0] == '\\' or filepath[0] == '/':
-                        filepath = filepath[1:]
-                    df=pd.DataFrame({'File Name':filepath,
-                                    'Object Type':'Page',
-                                    'Title':'Page '+digits.lstrip('0'),
-                                    'Item Sequence':digits.lstrip('0'),
-                                    'Parent ARK':parent_ark},index=[0])
-                    items_df = pd.concat([df,items_df],ignore_index=True)
+                for child_item in child_items:
+                    digits=child_item.split('.')[0].split('_')[-1]
+                    if digits not in ['00','000','0000']:
+                        #fix file path
+                        filepath = str(PureWindowsPath(os.path.join(subdir,child_item)).as_posix())
+                        while filepath[0] == '\\' or filepath[0] == '/':
+                            filepath = filepath[1:]
+                        df=pd.DataFrame({'File Name':filepath,
+                                        'Object Type':'Page',
+                                        'Title':'Page '+digits.lstrip('0'),
+                                        'Item Sequence':digits.lstrip('0'),
+                                        'Parent ARK':parent_ark},index=[0])
+                        items_df = pd.concat([df,items_df],ignore_index=True)
+        elif subdir.is_file():
+            for filename in filenames:
+                name = os.path.split(filename)[1]
+                file_ID = (name.split('.')[0])
+                child_items = []
+
+                if file_ID in str(subdir):
+                    child_items.append(str(subdir))
+                parent_ark = works_df.loc[works_df['File Name'] == filename,'Item ARK'].iloc[0]
+
+                for child_item in child_items:
+                        digits=child_item.split('.')[0].split('_')[-1]
+                        if digits not in ['00','000','0000']:
+                            #fix file path
+                            filepath = str(PureWindowsPath(subdir).as_posix())
+                            while filepath[0] == '\\' or filepath[0] == '/':
+                                filepath = filepath[1:]
+                            df=pd.DataFrame({'File Name':filepath,
+                                            'Object Type':'Page',
+                                            'Title':'Page '+digits.lstrip('0'),
+                                            'Item Sequence':digits.lstrip('0'),
+                                            'Parent ARK':parent_ark},index=[0])
+                            items_df = pd.concat([df,items_df],ignore_index=True)
+            
     return items_df
 
 def main():
@@ -170,7 +186,7 @@ def main():
     viewing_hint = ''
     works_directory = ''
     if complex_items == "Y" or complex_items == "y":
-        items_directory = input("Enter the top-level directory of child item files (i.e. above the year level): ")
+        items_directory = input("Enter the top-level directory of child item files: ")
         viewing_hint = input("Enter the viewing hint for all child items: ")
     else:
         works_directory = input("Enter the master images directory (e.g. Masters\othermasters...): ").strip()
