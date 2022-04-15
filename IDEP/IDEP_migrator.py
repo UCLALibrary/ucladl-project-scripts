@@ -18,9 +18,6 @@ def map_concat_cols(input_df, output_df, works_path):
     candidate_cols =['Repository', 'Institution/Repository']
     output_df = concat_helper(input_df, output_df, candidate_cols, 'Repository')
 
-    candidate_cols =['Subject','Subject.topic']
-    output_df = concat_helper(input_df, output_df, candidate_cols, 'Subject')
-
     candidate_cols =['Abstract','Summary','Description.note']
     output_df = concat_helper(input_df, output_df, candidate_cols, 'Description.note')
 
@@ -78,6 +75,7 @@ def map_simple_cols(input_df, output_df):
                 'Description.longitude':'Description.longitude',
                 'Dimensions':'Format.dimensions',
                 'Extent':'Format.extent',
+                'PhysicalDescription.extent':'Format.extent',
                 'Medium':'Format.medium',
                 'Genre':'Genre',
                 'Language | code':'Language',
@@ -228,8 +226,7 @@ def main():
                       'Publisher.publisherName','Repository',
                       'Type.typeOfResource', 'Rights.copyrightStatus',
                       'Rights.rightsHolderContact','Statement of Responsibility',
-                      'Subject','Subject geographic',
-                      'Subject temporal']
+                      'Subject geographic', 'Subject temporal']
     output_df = pd.DataFrame(columns=destination_cols)
 
     print('Mapping work-level metadata')
