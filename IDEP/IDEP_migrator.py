@@ -79,6 +79,7 @@ def map_simple_cols(input_df, output_df):
                 'Medium':'Format.medium',
                 'Genre':'Genre',
                 'Language | code':'Language',
+                'local ID':'Local identifier',
                 'Creator':'Name.creator',
                 'Creator.artist':'Name.artist',
                 'Contributor.director':'Name.director',
