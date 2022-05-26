@@ -132,9 +132,10 @@ def add_item_pages(items_directory,works_df):
                 name = os.path.split(filename)[1]
                 file_ID = (name.split('.')[0])
                 child_items = []
-
+                
+                #special logic as of LEG-501: stricter file ID checking
                 for item in item_files:
-                    if file_ID in item:
+                    if file_ID == item.rsplit('_',1)[0]:
                         child_items.append(item)
                 parent_ark = works_df.loc[works_df['File Name'] == filename,'Item ARK'].iloc[0]
 
@@ -157,7 +158,7 @@ def add_item_pages(items_directory,works_df):
                 file_ID = (name.split('.')[0])
                 child_items = []
 
-                if file_ID in str(subdir):
+                if file_ID == str(subdir).rsplit('_',1)[0]:
                     child_items.append(str(subdir))
                 parent_ark = works_df.loc[works_df['File Name'] == filename,'Item ARK'].iloc[0]
 
