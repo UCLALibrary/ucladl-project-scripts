@@ -211,7 +211,7 @@ def main():
                         'shIntervalGranularity': 'days',
                         'shRunAtTime':  row['Harvest at time T'],
                         'shDir': 'custom',
-                        'shHarvestDir': 'harvest/{}/{}'.format(urlparse(row['Repository base URL']).netloc, collection_dir),
+                        'shHarvestDir': '/joai/data/{}/{}'.format(urlparse(row['Repository base URL']).netloc, collection_dir),
                         's': '+',
                         'shDontZipFiles': 'true',
                         'shSet': 'split' if collection_dir == '' else 'dontsplit'
