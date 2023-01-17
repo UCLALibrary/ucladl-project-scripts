@@ -213,16 +213,19 @@ def main():
                         'shBaseURL': row['Repository base URL'],
                         'shSetSpec': row['OAI-PMH SetSpec'],
                         'shMetadataPrefix': 'oai_dc',
-                        'shEnabledDisabled': 'enabled',
-                        'shHarvestingInterval': row['Harvest every X days'],
+                        'shHarvestingInterval': row['Harvest every X days'] or '',
                         'shIntervalGranularity': 'days',
-                        'shRunAtTime':  row['Harvest at time T'],
+                        'shRunAtTime':  row['Harvest at time T'] or '',
                         'shDir': 'custom',
-                        'shHarvestDir': 'harvest/{}/{}'.format(urlparse(row['Repository base URL']).netloc, collection_dir),
+                        'shHarvestDir': '/joai/data/{}/{}'.format(urlparse(row['Repository base URL']).netloc, collection_dir),
                         's': '+',
                         'shDontZipFiles': 'true',
                         'shSet': 'split' if collection_dir == '' else 'dontsplit'
                     }
+
+                    if row['Harvest every X days'] or row['Harvest at time T']:
+                        request_payload['shEnabledDisabled'] = 'enabled'
+
                     r = s.post(oai_submit_args['harvester_admin_url'],
                             data=request_payload,
                             cookies=s.cookies
