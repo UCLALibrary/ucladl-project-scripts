@@ -10,6 +10,7 @@ import os
 import pprint
 import re
 import requests
+from time import sleep
 from urllib.parse import urlparse, quote
 
 def main():
@@ -79,6 +80,9 @@ def main():
 
         if scheduled_harvests:
             for scheduled_harvest in scheduled_harvests:
+                # Issues occur sometimes if we move too fast
+                sleep(1)
+
                 print('''\nNext scheduled harvest to remove:
     Institution:\t{}
     OAI-PMH base URL:\t{}
@@ -153,6 +157,9 @@ def main():
 
         reader = csv.DictReader(csvfile, quotechar='\'')
         for row in reader:
+            # Issues occur sometimes if we move too fast
+            sleep(1)
+
             if not row['skip']:
                 # Print the CSV row in a nice format.
                 print('''\nNext scheduled harvest to add:
