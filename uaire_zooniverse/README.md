@@ -1,9 +1,18 @@
 # UCLA DLP Universidad del Aire transcripts
 This is a repository of helpful scripts for working with transcripts from our Universidad del Aire zooniverse project
 
-# Flatten transcripts
+# Steps to process transcripts
+1. First 
 
-After review, this script takes a list of transcriptions of individual audio snippets and flattens into one .txt file
+# preprocess_transcriptions.py
+This script pre processes zooniverse transcripts for manual review in three steps:
+- Extract workflows labelled "Transcribe audio (Spanish required)"
+- 
+- 
+
+# flatten_transcript.py
+
+After review transcriptions, this script takes a list of transcriptions of individual audio snippets and flattens into one .txt file. The script also produces a contributers report listing the contributers by total contributions and accepted contributions
 
 ## Set up
 
@@ -26,4 +35,6 @@ Enter the following command into the command prompt followed by the name of the 
 python3 flatten_transcript.py /path/to/csv/file/file.csv 
  ```
 
- After running this command the script will generate a .txt file containing the full transcript in the current working directory
+ After running this command the script will generate a .txt file containing the full transcript in the current working directory and a csv containing thre contributers report
+
+
