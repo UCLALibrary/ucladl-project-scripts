@@ -29,6 +29,9 @@ pip3 install numpy pandas
 
 ## Usage
 
+### Pre-process transcripts to prepare for manual review
+Enter the following command into the command prompt followed by the name of the zooniverse csv file
+
 ### Flatten .csv file of transcriptions
 Enter the following command into the command prompt followed by the name of the csv file
  ```python 

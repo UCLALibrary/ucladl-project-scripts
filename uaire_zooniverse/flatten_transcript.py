@@ -4,6 +4,7 @@ filename = sys.argv[1]
 
 df = pd.read_csv(filename)
 
+
 df_total_contributions = df[["user_name", "classification_id"]].groupby("user_name").count().reset_index().rename(columns = {"classification_id":"total_contributions"})
 
 df_accepted_contributions = df[["user_name", "y/n"]]
