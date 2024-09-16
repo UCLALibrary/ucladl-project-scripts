@@ -64,6 +64,10 @@ filename = sys.argv[1]
 df = extract_transcriptions(pd.read_csv(filename), "Transcribe audio (Spanish required)")
 df["file_name"] = df["subject_data"].apply(get_file_name)
 df["transcriptions"] = df["annotations"].apply(get_transcription)
+df["y/n"] = ""
+cols = ["file_name", "transcriptions", "y/n"] + list(df)[:-3]
+df = df.loc[:, cols]
+
 unique_base_filenames = df["file_name"].apply(extract_base_filename).unique()
 
 
@@ -73,6 +77,6 @@ if not os.path.exists("individual-csvs"):
 
 for i in unique_base_filenames:
     result = df[df["file_name"].str.contains(i)]
-    result.to_csv(f'individual-csvs/{i}.csv', index=False)
+    result.sort_values("file_name").to_csv(f'individual-csvs/{i}.csv', index=False)
 
 
