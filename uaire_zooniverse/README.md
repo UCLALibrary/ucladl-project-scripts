@@ -26,6 +26,8 @@ pip3 install numpy pandas
 
 ## Usage
 
+Clone this repository locally, move the csv file containing the zooniverse data into the uaire_zooniverse folder and run the following commands
+
 ### Pre-process transcripts to prepare for manual review
 Enter the following command into the command prompt followed by the name of the zooniverse csv file and the name of the transcription workflow
 
