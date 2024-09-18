@@ -1,14 +1,11 @@
 # UCLA DLP Universidad del Aire transcripts
 This is a repository of helpful scripts for working with transcripts from our Universidad del Aire zooniverse project
 
-# Steps to process transcripts
-1. First 
 
 # preprocess_transcriptions.py
-This script pre processes zooniverse transcripts for manual review in three steps:
-- Extract workflows labelled "Transcribe audio (Spanish required)"
-- 
-- 
+This script pre processes zooniverse transcripts for manual review in two steps:
+1. Filter out all non transcription related workflows
+2. Extract filenames and transcriptions from json_objects, clean up filenames, split transcriptions into csvs by filename and add "y/n" column for manual review
 
 # flatten_transcript.py
 
