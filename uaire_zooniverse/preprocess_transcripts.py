@@ -1,17 +1,17 @@
 import os, pandas as pd, json, re, sys
 
 
-###################################
-# Filter our transcription workflow
-###################################
+####################################
+# Filter our transcription workflow#
+####################################
 
 def extract_transcriptions(csv, workflow):
     transcriptions_only = csv[csv.workflow_name == workflow]
     return transcriptions_only  
 
-################################################
-# Extract filenames from subject_data column
-################################################
+#############################################
+# Extract filenames from subject_data column#
+#############################################
 
 
 # Clean filenames by properly formatting and adding leading 0 to file sequence
@@ -26,9 +26,9 @@ def clean_file_names(f):
 
 
 
-##########################################################
-# Extract filenames from subject_data column json string
-##########################################################
+#########################################################
+# Extract filenames from subject_data column json string#
+#########################################################
 
 def get_file_name(s):
     s_object = json.loads(s)
@@ -38,26 +38,26 @@ def get_file_name(s):
         file_name = clean_file_names(s_object[next(iter(s_object))]["filename"])
     return file_name
 
-###############################################
-# Get transcription from annotation json object
-###############################################
+################################################
+# Get transcription from annotation json object#
+################################################
 
 def get_transcription(t):
     transcription = json.loads(t)[0]["value"]
     return transcription
 
 
-##############################
-# get unique base filenames
-##############################
+############################
+# get unique base filenames#
+############################
 
 def extract_base_filename(s):
    return re.sub("(_[0-9]{4}).mp3$", '', s)
    
 
-#############################################
-# transform file passed using command line args
-#############################################
+#################################################
+# transform file passed using command line args #
+#################################################
 
 filename = sys.argv[1]
 
