@@ -60,8 +60,9 @@ def extract_base_filename(s):
 #################################################
 
 filename = sys.argv[1]
+workflow = sys.argv[2]
 
-df = extract_transcriptions(pd.read_csv(filename), "Transcribe audio (Spanish required)")
+df = extract_transcriptions(pd.read_csv(filename), workflow)
 df["file_name"] = df["subject_data"].apply(get_file_name)
 df["transcriptions"] = df["annotations"].apply(get_transcription)
 df["y/n"] = ""
