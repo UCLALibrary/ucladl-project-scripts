@@ -2,14 +2,14 @@
 This is a repository of helpful scripts for working with transcripts from our Universidad del Aire zooniverse project
 
 
-# preprocess_transcriptions.py
+# preprocess_transcripts.py
 This script pre processes zooniverse transcripts for manual review in two steps:
 1. Filter out all non transcription related workflows
 2. Extract filenames and transcriptions from json_objects, clean up filenames, split transcriptions into csvs by filename and add "y/n" column for manual review
 
 # flatten_transcript.py
 
-After review transcriptions, this script takes a list of transcriptions of individual audio snippets and flattens into one .txt file. The script also produces a contributers report listing the contributers by total contributions and accepted contributions
+After reviewing transcriptions, this script takes a list of transcriptions of individual audio snippets and flattens into one .txt file. The script also produces a contributers report listing the contributers by total contributions and accepted contributions
 
 ## Set up
 

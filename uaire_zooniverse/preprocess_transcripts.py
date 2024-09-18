@@ -1,6 +1,5 @@
 import os, pandas as pd, json, re, sys
 
-
 ####################################
 # Filter our transcription workflow#
 ####################################
