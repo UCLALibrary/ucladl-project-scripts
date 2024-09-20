@@ -79,4 +79,4 @@ for i in unique_base_filenames:
     result = df[df["file_name"].str.contains(i)]
     result.sort_values("file_name").to_csv(f'individual-csvs/{i}.csv', index=False)
 
-
+print(f"Transcripts extracted and split into csvs by file for review. csv files saved to /individual-csvs/")
