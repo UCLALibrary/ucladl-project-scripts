@@ -26,7 +26,9 @@ pip3 install numpy pandas
 
 ## Usage
 
-Clone this repository locally, move the csv file containing the zooniverse data into the uaire_zooniverse folder, cd into ucladl-project-scripts/uaire_zooniverse/ and run the following commands
+- Clone this repository locally
+- Move the csv file containing the zooniverse data into the uaire_zooniverse folder
+- cd into ucladl-project-scripts/uaire_zooniverse/ and run the following commands
 
 ### Pre-process transcripts to prepare for manual review
 Enter the following command into the command prompt followed by the name of the zooniverse csv file and the name of the transcription workflow
@@ -45,6 +47,6 @@ Enter the following command into the command prompt followed by the name of the 
 python3 flatten_transcript.py /path/to/csv/file/file.csv 
  ```
 
- After running this command the script will generate a .txt file containing the full transcript in the current working directory and a csv containing thre contributers report
+After running this command the script will generate a .txt file containing the full transcript in the current working directory and a csv containing thre contributers report
 
 
